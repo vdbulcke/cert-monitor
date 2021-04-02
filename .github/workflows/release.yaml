@@ -1,17 +1,89 @@
 # .github/workflows/release.yaml
 
-on: release
-name: Build Release
+# on: release
+# name: Build Release
+# jobs:
+#   release-linux-amd64:
+#     name: release linux/amd64
+#     runs-on: ubuntu-latest
+#     steps:
+#     - uses: actions/checkout@master
+#     - name: compile and release
+#       uses: ngs/go-release.action@v1.0.1
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         GOARCH: amd64
+#         GOOS: linux
+#         EXTRA_FILES: "README.md"
+
+
+name: Build and Release Binary
+
+on: [ push, pull_request ]
+
 jobs:
-  release-linux-amd64:
-    name: release linux/amd64
+
+  build:
+
+    if: contains(github.ref, 'v')
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@master
-    - name: compile and release
-      uses: ngs/go-release.action@v1.0.1
+    - uses: actions/checkout@v2
+    - name: Build the binary
+      run: make build
+
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: project-binaries
+        path: releases
+
+  create_release:
+    
+    if: contains(github.ref, 'v')
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+    
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+
+  upload_assets:
+
+    if: contains(github.ref, 'v')
+    runs-on: ubuntu-latest
+    needs: create_release
+
+    # strategy:
+    #   matrix:
+    #     os: [darwin_amd64, linux_amd64, windows_386, windows_amd64]
+  
+    steps:
+    
+    - name: Download built project binaries
+      uses: actions/download-artifact@v2
+      with:
+        name: project-binaries
+
+    - name: Upload Release Asset ${{ matrix.os }}
+      uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GOARCH: amd64
-        GOOS: linux
-        EXTRA_FILES: "README.md"
+      with:
+        upload_url: ${{ needs.create_release.outputs.upload_url }} 
+        asset_path: ./bin/cert-monitor_linux_amd64
+        asset_name: cert-monitor_linux_amd64
+        # asset_content_type: application/zip
