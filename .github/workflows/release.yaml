@@ -22,7 +22,9 @@ name: Build and Release Binary
 # on: [ push, pull_request ]
 
 ## Trigger on Release
-on: release
+on: 
+  release:
+    types: [created]
 
 jobs:
 
@@ -74,7 +76,7 @@ jobs:
 
     # if: contains(github.ref, 'v')
     runs-on: ubuntu-latest
-    needs: create_release
+    # needs: create_release
 
     # strategy:
     #   matrix:
