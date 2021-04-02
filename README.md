@@ -20,16 +20,8 @@ This tool can take a list of pem certificates, and/or a list of remote TLS endpo
 
 ## Build
 
-
-* building the docker container
 ```bash
-make docker-build
-```
-
-* push latest build to gitlab registry
-* building the docker container
-```bash
-make docker-push
+make build
 ```
 
 ## Config
@@ -125,8 +117,3 @@ Written in Golang.
 * `go.mod`
 * `go.sum`
 
-### Building 
-
-```
-make build
-```
