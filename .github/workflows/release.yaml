@@ -31,7 +31,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the binary
-      run: make build
+      run: make build-zip
 
     - name: Archive production artifacts
       uses: actions/upload-artifact@v2
@@ -52,11 +52,11 @@ jobs:
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-      # with:
-        # tag_name: ${{ github.ref }}
-        # release_name: Release ${{ github.ref }}
-        # draft: false
-        # prerelease: false
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
     
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
@@ -84,6 +84,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ needs.create_release.outputs.upload_url }} 
-        asset_path: ./bin/cert-monitor_linux_amd64
-        asset_name: cert-monitor_linux_amd64
-        # asset_content_type: application/zip
+        asset_path: ./cert-monitor_linux_amd64.zip
+        asset_name: cert-monitor_linux_amd64.zip
+        asset_content_type: application/zip
