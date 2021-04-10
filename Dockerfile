@@ -24,5 +24,5 @@ RUN apk --no-cache add ca-certificates
 ## non privileged user
 USER 1111 
 WORKDIR /app/
-COPY --from=0 /go/src/certificate-monitor/certificate-monitor .
+COPY --from=0 /go/src/certificate-monitor/cert-monitor .
 ENTRYPOINT ["/app/cert-monitor", "-config",  "/app/config.yaml"] 
