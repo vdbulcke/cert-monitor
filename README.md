@@ -17,14 +17,37 @@ This tool can take a list of pem certificates, and/or a list of remote TLS endpo
 # TYPE certmonitor_remote_certificate_expiration_timestamp_seconds gauge
 ```
 
+## Visualization And Alerting
 
-## Build
+Visualization can be done with the combination of Grafana and Prometheus and alerting can be done via those tool (e.g. Grafana alerts, Prometheus Alertmanager).
+### Dashboards
 
+Grafana dashboard can be found in `grafana-dashboards/`.
+
+
+## Builds & Releases
+
+Check releases: https://github.com/vdbulcke/cert-monitor/releases
+
+## Install 
+
+### Linux
+
+* Download the linux binary from https://github.com/vdbulcke/cert-monitor/releases 
+
+* Start the binary with a config file (see section Config)
 ```bash
-make build
+./cert-monitor -config /path/to/config.yaml
+```
+### Docker
+
+*  image: https://hub.docker.com/repository/docker/vdbulcke/cert-monitor
+* run with config file mounted on `/app/config.yaml`
+```bash
+podman run -d --rm -p 9000:9000 -v $(pwd)/example/config.yaml:/app/config.yaml:z vdbulcke/cert-monitor:0.1.0
 ```
 
-## Config
+## Configuration
 
 Example: 
 ```yaml
@@ -107,13 +130,4 @@ export http_proxy='your-forward-proxy.example.com:3128'
 export https_proxy='your-forward-proxy.example.com:3128'
 export no_proxy='.google.com,.example.com'
 ```
-
-## Project 
-
-Written in Golang. 
-
-* `main.go`
-* `certmonitor/`
-* `go.mod`
-* `go.sum`
 
