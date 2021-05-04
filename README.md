@@ -44,7 +44,7 @@ Check releases: https://github.com/vdbulcke/cert-monitor/releases
 *  image: https://hub.docker.com/repository/docker/vdbulcke/cert-monitor
 * run with config file mounted on `/app/config.yaml`
 ```bash
-podman run -d --rm -p 9000:9000 -v $(pwd)/example/config.yaml:/app/config.yaml:z vdbulcke/cert-monitor:0.1.0
+podman run -d --rm -p 9000:9000 -v $(pwd)/example/config.yaml:/app/config.yaml:z vdbulcke/cert-monitor:0.2.0
 ```
 
 ## Configuration
