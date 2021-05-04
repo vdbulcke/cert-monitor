@@ -220,6 +220,11 @@ func (certMonitor *CertMonitor) LoadLocalCertificateMetrics() {
 // LoadRemoteTLSCertificateMetrics load Certifcate from Remote endpoints
 func (certMonitor *CertMonitor) LoadRemoteTLSCertificateMetrics() {
 	certMonitor.logger.Info("Executing  loadRemoteTLSCertificateMetrics")
+
+	// reset mertics before re-checking the remote endpoint
+	certMonitor.logger.Debug("Resetting Metric for remote sraping")
+	promMetricRemoteCertificateExpirationSeconds.Reset()
+
 	// for each endpoints
 	for _, remoteTLSEndpoint := range certMonitor.config.RemoteTLSEndpoints {
 
