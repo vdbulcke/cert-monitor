@@ -143,6 +143,10 @@ func (certMonitor *CertMonitor) getCertificateFromRemoteURL(address string, serv
 	}
 
 	defer resp.Body.Close()
+
+	// close client to clear TLS cache
+	defer client.CloseIdleConnections()
+
 	return resp.TLS.PeerCertificates, nil
 }
 
