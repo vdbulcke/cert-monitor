@@ -50,77 +50,7 @@ podman run -d --rm -p 9000:9000 -v $(pwd)/example/config.yaml:/app/config.yaml:z
 ## Configuration
 
 Example: 
-```yaml
----
-##
-## Log
-##
-### Set a log file (default is 'stdout')
-# log_file: /tmp/debug.log
-### Set the log format as JSON (default is 'false') 
-# log_json_format: true
-
-##
-## Prometheus
-## 
-### Listening port 
-prometheus_listening_port: 9000
-
-##
-## Scheduler
-##
-### period in days to check the Remote endpoint 
-### see 'remote_tls_endpoints' and 'remote_tcp_tls_endpoints'
-schedule_job_days: 1
-
-##
-## Remote TLS endpoint
-##
-### List of 'RemoteTLSEndpoints'
-###
-### RemoteTLSEndpoints:
-###     ## address to query. Format
-###     ## - https://example.com:8443/some/path
-###     ## - example.com:8843
-###     ## - example.com
-###     address: (required)
-###     ## servername for the TLS SNI extension. 
-###     servername: (optional)
-remote_tls_endpoints: 
-## use 'servername' to Force the SNI to a specific value
-- address: "google.com"
-  servername: "google.com" 
-
-## use 'address' for default SNI value
-- address: "maps.google.com"
-
-##
-## Remote TCP TLS endpoint
-##
-### List of 'RemoteTLSEndpoints'
-###
-### RemoteTCPTLSEndpoint:
-###     ## address or IP to query. Format
-###     ## - example.com
-###     address: (required)
-###     ## port  to query. Format Integer
-###     port: (required)
-###     ## servername for the TLS SNI extension. 
-###     servername:
-remote_tcp_tls_endpoints:
-- address: "ldap-server.example.com"
-  port: 443
-  servername: "*.example.com"
-
-
-##
-## CertificatesDir
-##
-### path to a directory that contains from certificates as PEM
-### that needs to be monitored
-### NOTE: This is only loaded at startup
-certificate_dir: /path/to/a/dir/containing/pem/certificates
-```
+* `example/config.yaml`
 
 ## Using Proxy
 
