@@ -180,9 +180,9 @@ func (certMonitor *CertMonitor) loadRemoteCertsMetrics(certs []*x509.Certificate
 // ScheduleCheckCertificatesJob Check certificate in Dir
 func (certMonitor *CertMonitor) ScheduleCheckCertificatesJob() {
 	certMonitor.logger.Info("Starting Scheduler")
-	days := certMonitor.config.ScheduleJobDays
+	hours := certMonitor.config.ScheduleJobHours
 
-	scheduler.Every(days).Day().Run(certMonitor.LoadRemoteTLSCertificateMetrics)
+	scheduler.Every(hours).Hours().Run(certMonitor.LoadRemoteTLSCertificateMetrics)
 }
 
 // LoadLocalCertificateMetrics Loads Certificate metric from the local dir
@@ -220,6 +220,11 @@ func (certMonitor *CertMonitor) LoadLocalCertificateMetrics() {
 // LoadRemoteTLSCertificateMetrics load Certifcate from Remote endpoints
 func (certMonitor *CertMonitor) LoadRemoteTLSCertificateMetrics() {
 	certMonitor.logger.Info("Executing  loadRemoteTLSCertificateMetrics")
+
+	// reset mertics before re-checking the remote endpoint
+	certMonitor.logger.Debug("Resetting Metric for remote sraping")
+	promMetricRemoteCertificateExpirationSeconds.Reset()
+
 	// for each endpoints
 	for _, remoteTLSEndpoint := range certMonitor.config.RemoteTLSEndpoints {
 

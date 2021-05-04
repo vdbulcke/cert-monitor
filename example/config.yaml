@@ -18,7 +18,11 @@ prometheus_listening_port: 9000
 ##
 ### period in days to check the Remote endpoint 
 ### see 'remote_tls_endpoints' and 'remote_tcp_tls_endpoints'
-schedule_job_days: 1
+# schedule_job_days: 1 ### DEPRECATED since version v0.2.0
+
+### period in hours to check the Remote endpoint 
+### see 'remote_tls_endpoints' and 'remote_tcp_tls_endpoints'
+schedule_job_hours: 12
 
 ##
 ## Remote TLS endpoint
