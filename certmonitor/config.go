@@ -17,7 +17,8 @@ type Config struct {
 	// When to alert that certificate will expire
 	ClockSkewDays int `yaml:"clock_skew_day"`
 	// Schedule Checks in Hours
-	ScheduleJobDays int `yaml:"schedule_job_days"`
+	ScheduleJobHours int `yaml:"schedule_job_hours"`
+
 	// Directory containing certificate to monitor
 	CertificatesDir string `yaml:"certificate_dir"`
 

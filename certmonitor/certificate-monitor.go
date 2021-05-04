@@ -180,9 +180,9 @@ func (certMonitor *CertMonitor) loadRemoteCertsMetrics(certs []*x509.Certificate
 // ScheduleCheckCertificatesJob Check certificate in Dir
 func (certMonitor *CertMonitor) ScheduleCheckCertificatesJob() {
 	certMonitor.logger.Info("Starting Scheduler")
-	days := certMonitor.config.ScheduleJobDays
+	hours := certMonitor.config.ScheduleJobHours
 
-	scheduler.Every(days).Day().Run(certMonitor.LoadRemoteTLSCertificateMetrics)
+	scheduler.Every(hours).Hours().Run(certMonitor.LoadRemoteTLSCertificateMetrics)
 }
 
 // LoadLocalCertificateMetrics Loads Certificate metric from the local dir

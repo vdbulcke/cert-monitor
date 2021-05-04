@@ -120,7 +120,7 @@ func main() {
 	}
 
 	// Start Scheduler
-	if config.ScheduleJobDays != 0 {
+	if config.ScheduleJobHours != 0 {
 		certMonitor.ScheduleCheckCertificatesJob()
 	}
 
