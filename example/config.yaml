@@ -67,7 +67,7 @@ remote_tcp_tls_endpoints: []
 ##
 ## Remote SAML Metadata URL Endpoints
 ##
-## Since Version 0.2.0
+## Since Version 0.3.0
 ### List of 'RemoteSAMLMetdataEndpoint'
 ###
 ### RemoteSAMLMetdataEndpoints:
