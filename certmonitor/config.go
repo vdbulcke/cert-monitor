@@ -28,6 +28,9 @@ type Config struct {
 	// A  list of RemoteTCPTLSEndpoint
 	RemoteTCPTLSEndpoints []*RemoteTCPTLSEndpoint `yaml:"remote_tcp_tls_endpoints"`
 
+	// A  list of RemoteSAMLMetdataEndpoints
+	RemoteSAMLMetdataEndpoints []*RemoteSAMLMetdataEndpoint `yaml:"remote_saml_metadata_endpoints"`
+
 	// Timeout when calling the remote endpoint
 	RemoteEndpointTimeout int `yaml:"remote_endpoint_timeout"`
 
@@ -46,6 +49,11 @@ type RemoteTCPTLSEndpoint struct {
 	Address    string `yaml:"address" validate:"required,omitempty"`
 	Port       int    `yaml:"port" validate:"required,omitempty"`
 	ServerName string `yaml:"servername"`
+}
+
+// RemoteSAMLMetdataEndpoint a remote URL exposing SAML Metadata
+type RemoteSAMLMetdataEndpoint struct {
+	MetadataURL string `yaml:"url" validate:"required"`
 }
 
 // CertMonitor Cert Monitor Object

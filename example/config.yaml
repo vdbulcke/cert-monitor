@@ -65,6 +65,23 @@ remote_tcp_tls_endpoints: []
 
 
 ##
+## Remote SAML Metadata URL Endpoints
+##
+## Since Version 0.2.0
+### List of 'RemoteSAMLMetdataEndpoint'
+###
+### RemoteSAMLMetdataEndpoints:
+###     ## Url pointing to SAML Metadata
+###     ## -  https://iamapps-public.belgium.be/saml/fas-metadata.xml
+###     url: (required)
+remote_saml_metadata_endpoints:
+- url: "https://iamapps-public.int.belgium.be/saml/fas-metadata.xml"
+- url: "https://idp.iamfas.belgium.be/EidasNode/ServiceMetadata"
+- url: "https://idp.iamfas.belgium.be/EidasNode/ConnectorMetadata"
+
+
+
+##
 ## CertificatesDir
 ##
 ### path to a directory that contains from certificates as PEM

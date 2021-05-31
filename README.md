@@ -17,6 +17,12 @@ This tool can take a list of pem certificates, and/or a list of remote TLS endpo
 # TYPE certmonitor_remote_certificate_expiration_timestamp_seconds gauge
 ```
 
+* `certmonitor_remote_saml_metadata_certificate_expiration_timestamp_seconds{cert_subj=[Certificate Subject], ,sha256fingerprint=[Certificate SHA256 Fingerprint]}`
+```
+# HELP certmonitor_remote_saml_metadata_certificate_expiration_timestamp_seconds Expiration Date of Certificate as Unix Timestamp in seconds
+# TYPE certmonitor_remote_saml_metadata_certificate_expiration_timestamp_seconds gauge
+```
+
 ## Visualization And Alerting
 
 Visualization can be done with the combination of Grafana and Prometheus and alerting can be done via those tool (e.g. Grafana alerts, Prometheus Alertmanager).

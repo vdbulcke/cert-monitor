@@ -3,6 +3,9 @@ LD_FLAGS ?= -X main.GitCommit=${GIT_COMMIT}
 
 all: build
 
+test: 
+	cd certmonitor/ && go test -run ''
+	
 build: 
 	mkdir -p bin/
 	env GOOS=linux GOARCH=amd64 CGO_ENABLED=0  go build -ldflags "${LD_FLAGS}" -o bin/cert-monitor_linux_amd64 main.go 
