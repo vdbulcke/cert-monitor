@@ -3,6 +3,15 @@
 ## Concept
 This tool can take a list of pem certificates, and/or a list of remote TLS endpoints to get the certificate chain from and will expose prometheus metrics with the expiration date of those certificates. 
 
+## Features
+
+* HTTPS and TCP (e.g. LDAPS) certificates discovery
+* Static PEM Certificate discovery
+* SAML Metadata Certificate (IDP and SP SSO descriptor) discovery
+* Scheduler: periodically re-loads HTTPS, TCP and SAML Metadata certificates
+* Exposes Certificate Expirations as Prometheus Metrics
+* (Alerting provided by Grafana: dashboards provided in `grafana-dashboards/`)
+
 ### Metrics
 
 * `certmonitor_certificate_expiration_timestamp_seconds{cert_subj=[Certificate Subject], ,sha256fingerprint=[Certificate SHA256 Fingerprint]}`
@@ -15,6 +24,12 @@ This tool can take a list of pem certificates, and/or a list of remote TLS endpo
 ```
 # HELP certmonitor_remote_certificate_expiration_timestamp_seconds Expiration Date of Certificate as Unix Timestamp in seconds
 # TYPE certmonitor_remote_certificate_expiration_timestamp_seconds gauge
+```
+
+* `certmonitor_remote_saml_metadata_certificate_expiration_timestamp_seconds{cert_subj=[Certificate Subject], ,sha256fingerprint=[Certificate SHA256 Fingerprint]}`
+```
+# HELP certmonitor_remote_saml_metadata_certificate_expiration_timestamp_seconds Expiration Date of Certificate as Unix Timestamp in seconds
+# TYPE certmonitor_remote_saml_metadata_certificate_expiration_timestamp_seconds gauge
 ```
 
 ## Visualization And Alerting

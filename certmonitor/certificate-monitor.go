@@ -224,6 +224,7 @@ func (certMonitor *CertMonitor) LoadRemoteTLSCertificateMetrics() {
 	// reset mertics before re-checking the remote endpoint
 	certMonitor.logger.Debug("Resetting Metric for remote sraping")
 	promMetricRemoteCertificateExpirationSeconds.Reset()
+	promMetricRemoteSAMLMetadataCertificateExpirationSeconds.Reset()
 
 	// for each endpoints
 	for _, remoteTLSEndpoint := range certMonitor.config.RemoteTLSEndpoints {
@@ -253,6 +254,21 @@ func (certMonitor *CertMonitor) LoadRemoteTLSCertificateMetrics() {
 
 		// setting prometheus metrics for list of certs
 		certMonitor.loadRemoteCertsMetrics(certs, address, remoteTCPTLSEndpoint.ServerName)
+
+	}
+
+	// for each SAML endpoints
+	for _, remoteSAMLEndpoint := range certMonitor.config.RemoteSAMLMetdataEndpoints {
+
+		// get the list of certs from endpoint
+		certs, err := certMonitor.getSAMLMetadataCertificates(remoteSAMLEndpoint.MetadataURL)
+		if err != nil {
+			certMonitor.logger.Error("Error Getting SAML Metadata Certificate", "remoteSAMLEndpoint", remoteSAMLEndpoint, "err", err)
+			continue
+		}
+
+		// setting prometheus metrics for list of certs
+		certMonitor.loadRemoteSAMLMetadataCertificateMetrics(certs, remoteSAMLEndpoint.MetadataURL)
 
 	}
 
