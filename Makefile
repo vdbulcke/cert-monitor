@@ -16,7 +16,7 @@ build-zip:
 	mkdir -p releases/
 	zip releases/cert-monitor_linux_amd64.zip bin/cert-monitor_linux_amd64
 
-build-macos:
+build-macos-intel:
 	env GOOS=darwin GOARCH=amd64 CGO_ENABLED=0  go build -ldflags "${LD_FLAGS}" -o bin/cert-monitor_darwin_amd64 main.go 
 
 build-macos-arm:
