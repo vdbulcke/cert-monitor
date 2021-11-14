@@ -44,6 +44,17 @@ Grafana dashboard can be found in `grafana-dashboards/`.
 
 Check releases: https://github.com/vdbulcke/cert-monitor/releases
 
+### Goreleaser 
+
+* Install: https://goreleaser.com/install/
+* Create a snapshot build: 
+```
+goreleaser release --rm-dist --skip-publish --snapshot
+```
+
+
+
+
 ## Install 
 
 ### Linux
