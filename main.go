@@ -22,10 +22,10 @@ import (
 var GitCommit string
 
 // Version
-var version = "0.3.0"
+var Version = "0.3.0"
 
 // HumanVersion version with commit
-var HumanVersion = fmt.Sprintf("%s-(%s)", version, GitCommit)
+var HumanVersion = fmt.Sprintf("%s-(%s)", Version, GitCommit)
 
 func main() {
 	// Parse argument
