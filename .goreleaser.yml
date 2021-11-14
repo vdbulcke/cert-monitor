@@ -7,6 +7,7 @@ before:
 builds:
 
   - main: "./main.go"
+    binary: cert-monitor
     env:
       - CGO_ENABLED=0
     goos:
@@ -22,13 +23,22 @@ builds:
       ## auto inject commit and version at build time
       - -X main.GitCommit={{ .ShortCommit }} -X main.Version={{ .Version }} 
 archives:
-  - replacements:
+  - 
+    replacements:
       ## Rewrite Archive name 
       darwin: Darwin
       linux: Linux
       windows: Windows
       386: i386
       amd64: x86_64
+    files:
+    - LICENSE
+
+## create MacOS universal binary
+universal_binaries:
+## set to true to ONLY generate a universal binary 
+- replace: false
+
 checksum:
   name_template: 'checksums.txt'
 snapshot:
@@ -43,3 +53,19 @@ changelog:
       - '^typo:'
       - '^ignore:'
 
+release:
+  ## set github header and footer
+  header: |
+    ## Docker
+
+    repo: https://hub.docker.com/repository/docker/vdbulcke/cert-monitor/general
+    ```bash
+    docker pull vdbulcke/cert-monitor:0.3.0
+    ```
+
+  # # Footer template for the release body.
+  # # Defaults to empty.
+  # footer: |
+  #   ## Thanks!
+
+  #   Those were the changes on {{ .Tag }}!
