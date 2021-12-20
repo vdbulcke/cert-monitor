@@ -21,7 +21,7 @@ builds:
       # - 386
     ldflags:
       ## auto inject commit and version at build time
-      - -X main.GitCommit={{ .ShortCommit }} -X main.Version={{ .Version }} 
+      - -X github.com/vdbulcke/cert-monitor/cmd.GitCommit={{ .ShortCommit }} -X github.com/vdbulcke/cert-monitor/cmd.Version={{ .Version }} 
 archives:
   - 
     replacements:

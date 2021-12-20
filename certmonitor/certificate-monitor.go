@@ -2,16 +2,13 @@ package certmonitor
 
 import (
 	"crypto/sha256"
-	"crypto/tls"
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"net/http"
 	"os"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/carlescere/scheduler"
@@ -52,6 +49,14 @@ func (certMonitor *CertMonitor) checkCertificate(certRaw string, clockSkewDays i
 	return true
 }
 
+// ScheduleCheckCertificatesJob Check certificate in Dir
+func (certMonitor *CertMonitor) ScheduleCheckCertificatesJob() {
+	certMonitor.logger.Info("Starting Scheduler")
+	hours := certMonitor.config.ScheduleJobHours
+
+	scheduler.Every(hours).Hours().Run(certMonitor.LoadRemoteCertificateMetrics)
+}
+
 // getX509CertFromFile  Parse Certificate from file and return X509Certificate or error
 func (certMonitor *CertMonitor) getX509CertFromFile(certFile string) (*x509.Certificate, error) {
 	// read cert
@@ -65,7 +70,7 @@ func (certMonitor *CertMonitor) getX509CertFromFile(certFile string) (*x509.Cert
 	certPem, _ := pem.Decode([]byte(certRaw))
 	if certPem == nil {
 		certMonitor.logger.Error("Could not Convert to PEM certificate", "file", certFile)
-		return nil, errors.New("Error Parsing PEM")
+		return nil, errors.New("error parsing PEM")
 	}
 
 	// Parse X509
@@ -78,76 +83,6 @@ func (certMonitor *CertMonitor) getX509CertFromFile(certFile string) (*x509.Cert
 	// return X509 cert
 	return cert, nil
 
-}
-
-func (certMonitor *CertMonitor) getCertificateExpiration(certFile string) (*time.Time, error) {
-	// get certificate
-	cert, err := certMonitor.getX509CertFromFile(certFile)
-	if err != nil {
-		certMonitor.logger.Error("Could not parse X509 certificate", "file", certFile)
-		return nil, err
-	}
-
-	// return Not After time
-	return &cert.NotAfter, nil
-
-}
-
-// getCertificateFromRemoteAddress returns the list for X509 Certificate from remote address
-func (certMonitor *CertMonitor) getCertificateFromRemoteAddress(address string, servername string) ([]*x509.Certificate, error) {
-
-	// open TLS connection
-	conn, err := tls.Dial("tcp", address, &tls.Config{
-		InsecureSkipVerify: true,
-		ServerName:         servername,
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	defer conn.Close()
-
-	return conn.ConnectionState().PeerCertificates, nil
-}
-
-// getCertificateFromRemoteURL returns the list for X509 Certificate from remote address
-func (certMonitor *CertMonitor) getCertificateFromRemoteURL(address string, servername string) ([]*x509.Certificate, error) {
-
-	// skipping the TLS verification endpoint could be self signed
-	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{
-		InsecureSkipVerify: true,
-		ServerName:         servername,
-	}
-
-	// Don't follow redirect
-	// setting timeout
-	client := http.Client{
-		Timeout: time.Duration(certMonitor.config.RemoteEndpointTimeout) * time.Second,
-		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			return http.ErrUseLastResponse
-		},
-	}
-
-	url := address
-	// Check Address is an Url of not
-	if !strings.HasPrefix(address, "https://") {
-		url = "https://" + address
-	}
-
-	// sending a HEAD to keep it light weight
-	resp, err := client.Head(url)
-
-	if err != nil {
-		return nil, err
-	}
-
-	defer resp.Body.Close()
-
-	// close client to clear TLS cache
-	defer client.CloseIdleConnections()
-
-	return resp.TLS.PeerCertificates, nil
 }
 
 // loadRemoteCertsMetrics set the actual prometheus metrics
@@ -175,14 +110,6 @@ func (certMonitor *CertMonitor) loadRemoteCertsMetrics(certs []*x509.Certificate
 		}).Set(float64(notAfter.Unix()))
 	}
 
-}
-
-// ScheduleCheckCertificatesJob Check certificate in Dir
-func (certMonitor *CertMonitor) ScheduleCheckCertificatesJob() {
-	certMonitor.logger.Info("Starting Scheduler")
-	hours := certMonitor.config.ScheduleJobHours
-
-	scheduler.Every(hours).Hours().Run(certMonitor.LoadRemoteTLSCertificateMetrics)
 }
 
 // LoadLocalCertificateMetrics Loads Certificate metric from the local dir
@@ -217,9 +144,32 @@ func (certMonitor *CertMonitor) LoadLocalCertificateMetrics() {
 
 }
 
-// LoadRemoteTLSCertificateMetrics load Certifcate from Remote endpoints
-func (certMonitor *CertMonitor) LoadRemoteTLSCertificateMetrics() {
-	certMonitor.logger.Info("Executing  loadRemoteTLSCertificateMetrics")
+// loadRemoteSAMLMetadataCertificateMetrics set the actual prometheus metrics
+func (certMonitor *CertMonitor) loadRemoteSAMLMetadataCertificateMetrics(certs []*x509.Certificate, metadatURL string) {
+
+	for _, cert := range certs {
+		notAfter := cert.NotAfter
+		subj := cert.Subject.String()
+		fingerprint := sha256.Sum256(cert.Raw)
+
+		if certMonitor.logger.IsDebug() {
+			certMonitor.logger.Debug("Setting metric for", "cert_subj", subj, "sha256fingerprint", fmt.Sprintf("%x", fingerprint), "metadatURL", metadatURL)
+		}
+
+		// record Certificate expiration data as Unix Timesatamp
+		promMetricRemoteSAMLMetadataCertificateExpirationSeconds.With(prometheus.Labels{
+			"cert_subj":         subj,
+			"sha256fingerprint": fmt.Sprintf("%x", fingerprint),
+			// "remote_addr":       connectionSting,
+			// "tls_servername":    tlsServername,
+		}).Set(float64(notAfter.Unix()))
+	}
+
+}
+
+// LoadRemoteCertificateMetrics load Certifcate from Remote endpoints
+func (certMonitor *CertMonitor) LoadRemoteCertificateMetrics() {
+	certMonitor.logger.Info("Executing  LoadRemoteCertificateMetrics")
 
 	// reset mertics before re-checking the remote endpoint
 	certMonitor.logger.Debug("Resetting Metric for remote sraping")

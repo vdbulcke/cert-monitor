@@ -2,39 +2,18 @@ package certmonitor
 
 import (
 	"context"
-	"crypto/sha256"
 	"crypto/x509"
 	"encoding/base64"
-	"fmt"
 	"net/http"
 	"net/url"
 	"strings"
 
 	"github.com/crewjam/saml/samlsp"
-	"github.com/prometheus/client_golang/prometheus"
 )
 
-// loadRemoteSAMLMetadataCertificateMetrics set the actual prometheus metrics
-func (certMonitor *CertMonitor) loadRemoteSAMLMetadataCertificateMetrics(certs []*x509.Certificate, metadatURL string) {
-
-	for _, cert := range certs {
-		notAfter := cert.NotAfter
-		subj := cert.Subject.String()
-		fingerprint := sha256.Sum256(cert.Raw)
-
-		if certMonitor.logger.IsDebug() {
-			certMonitor.logger.Debug("Setting metric for", "cert_subj", subj, "sha256fingerprint", fmt.Sprintf("%x", fingerprint), "metadatURL", metadatURL)
-		}
-
-		// record Certificate expiration data as Unix Timesatamp
-		promMetricRemoteSAMLMetadataCertificateExpirationSeconds.With(prometheus.Labels{
-			"cert_subj":         subj,
-			"sha256fingerprint": fmt.Sprintf("%x", fingerprint),
-			// "remote_addr":       connectionSting,
-			// "tls_servername":    tlsServername,
-		}).Set(float64(notAfter.Unix()))
-	}
-
+// GetSAMLMetadataCertificates returns the X509 certificates from the SAML metadata url
+func (certMonitor *CertMonitor) GetSAMLMetadataCertificates(metadataURL string) ([]*x509.Certificate, error) {
+	return certMonitor.getSAMLMetadataCertificates(metadataURL)
 }
 
 func (certMonitor *CertMonitor) getSAMLMetadataCertificates(metadataURL string) ([]*x509.Certificate, error) {

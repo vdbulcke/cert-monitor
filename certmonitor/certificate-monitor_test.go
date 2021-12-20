@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/go-hclog"
+	"github.com/vdbulcke/cert-monitor/ui"
 )
 
 func TestHttpClientGetCert(t *testing.T) {
@@ -25,9 +26,8 @@ func TestHttpClientGetCert(t *testing.T) {
 		t.FailNow()
 	}
 
-	for _, cert := range certs {
-		appLogger.Debug("found cert", "cert", cert.Subject.String())
-	}
+	ui := ui.NewCertMonitorUI(appLogger, false, true)
+	ui.PrintX509CertList(certs, 90)
 
 	// t.FailNow()
 }
