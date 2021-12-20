@@ -10,7 +10,6 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/crewjam/saml"
 	"github.com/crewjam/saml/samlsp"
 	"github.com/prometheus/client_golang/prometheus"
 )
@@ -60,15 +59,18 @@ func (certMonitor *CertMonitor) getSAMLMetadataCertificates(metadataURL string) 
 	for _, idpSSODescriptors := range idpMetadata.IDPSSODescriptors {
 		for _, KeyDescriptors := range idpSSODescriptors.KeyDescriptors {
 
-			cert, err := certMonitor.getCertificateFromSAMLKeyDescriptor(&KeyDescriptors)
-			if err != nil {
-				certMonitor.logger.Error("Could not parse X509 Certificate from keydescriptor", "metadataURL", metadataURL, "err", err)
-				// continue processing
-				continue
-			}
+			// go over each certs from KeyInfo and convert into X509Certificates
+			for _, c := range KeyDescriptors.KeyInfo.X509Data.X509Certificates {
+				cert, err := certMonitor.getCertificateFromSAMLKeyDescriptorData(c.Data)
+				if err != nil {
+					certMonitor.logger.Error("Could not parse X509 Certificate from keydescriptor", "metadataURL", metadataURL, "err", err)
+					// continue processing
+					continue
+				}
 
-			// add X509 Cert to list
-			samlCerts = append(samlCerts, cert)
+				// add X509 Cert to list
+				samlCerts = append(samlCerts, cert)
+			}
 
 		}
 
@@ -77,15 +79,19 @@ func (certMonitor *CertMonitor) getSAMLMetadataCertificates(metadataURL string) 
 	// Process IDP Descriptor
 	for _, spSSODescriptors := range idpMetadata.SPSSODescriptors {
 		for _, KeyDescriptors := range spSSODescriptors.KeyDescriptors {
-			cert, err := certMonitor.getCertificateFromSAMLKeyDescriptor(&KeyDescriptors)
-			if err != nil {
-				certMonitor.logger.Error("Could not parse X509 Certificate from keydescriptor", "metadataURL", metadataURL, "err", err)
-				// continue processing
-				continue
-			}
 
-			// add X509 Cert to list
-			samlCerts = append(samlCerts, cert)
+			// go over each certs from KeyInfo and convert into X509Certificates
+			for _, c := range KeyDescriptors.KeyInfo.X509Data.X509Certificates {
+				cert, err := certMonitor.getCertificateFromSAMLKeyDescriptorData(c.Data)
+				if err != nil {
+					certMonitor.logger.Error("Could not parse X509 Certificate from keydescriptor", "metadataURL", metadataURL, "err", err)
+					// continue processing
+					continue
+				}
+
+				// add X509 Cert to list
+				samlCerts = append(samlCerts, cert)
+			}
 
 		}
 
@@ -94,17 +100,16 @@ func (certMonitor *CertMonitor) getSAMLMetadataCertificates(metadataURL string) 
 	return samlCerts, nil
 }
 
-func (certMonitor *CertMonitor) getCertificateFromSAMLKeyDescriptor(samlKeyDescriptors *saml.KeyDescriptor) (*x509.Certificate, error) {
-	// get keyinfo cert string
-	x509String := samlKeyDescriptors.KeyInfo.Certificate
-	certMonitor.logger.Debug("KeyInfo raw 509 cert", "x509String", x509String)
+func (certMonitor *CertMonitor) getCertificateFromSAMLKeyDescriptorData(x509String string) (*x509.Certificate, error) {
+
+	certMonitor.logger.Debug("KeyInfo raw x509 cert", "x509String", x509String)
 
 	// Format X509 Base64 PEM
 	x509String = strings.ReplaceAll(x509String, "\n", "")
 	x509String = strings.ReplaceAll(x509String, "\r", "")
 	x509String = strings.ReplaceAll(x509String, " ", "")
 
-	certMonitor.logger.Debug("KeyInfo formatted 509 cert", "x509String", x509String)
+	certMonitor.logger.Debug("KeyInfo formatted x509 cert", "x509String", x509String)
 
 	// base64 decode PEM formatted X509
 	x509DecodedByte, err := base64.StdEncoding.DecodeString(x509String)
