@@ -1,7 +1,6 @@
 # Certificate Monitor
 
-## Concept
-This tool can take a list of pem certificates, and/or a list of remote TLS endpoints to get the certificate chain from and will expose prometheus metrics with the expiration date of those certificates. 
+Cert Monitor is a CLI tool to discover and monitor X509 Certificates from various sources (TCP, HTTPS, SAML, Files). It is composed of a monitoring _server_ that will periodically re-discover configured remote sources and expose the corresponding certificate expiration date as prometheus metrics. Additionally, it comes with a built-in cli that allows to fetch certificates from _ad-hoc_ remote sources and display some information about the certificates (Subject, Issuer, Expiration, PEM output).  
 
 ## Features
 
@@ -11,8 +10,13 @@ This tool can take a list of pem certificates, and/or a list of remote TLS endpo
 * Scheduler: periodically re-loads HTTPS, TCP and SAML Metadata certificates
 * Exposes Certificate Expirations as Prometheus Metrics
 * (Alerting provided by Grafana: dashboards provided in `grafana-dashboards/`)
+* CLI: fetches certificate from remote sources (TCP, HTTPS, SAML) and display certificate information and PEM output
 
-### Metrics
+## CLI Docs
+
+* [cert-monitor](doc/cert-monitor.md)	 - cert-monitor is a tool to monitor x509 certificates
+
+### Server Prometheus Metrics
 
 * `certmonitor_certificate_expiration_timestamp_seconds{cert_subj=[Certificate Subject], ,sha256fingerprint=[Certificate SHA256 Fingerprint]}`
 ```
@@ -49,7 +53,7 @@ Check releases: https://github.com/vdbulcke/cert-monitor/releases
 * Install: https://goreleaser.com/install/
 * Create a snapshot build: 
 ```
-goreleaser release --rm-dist --skip-publish --snapshot
+goreleaser build --rm-dist --snapshot
 ```
 
 
@@ -70,7 +74,7 @@ goreleaser release --rm-dist --skip-publish --snapshot
 *  image: https://hub.docker.com/repository/docker/vdbulcke/cert-monitor
 * run with config file mounted on `/app/config.yaml`
 ```bash
-podman run -d --rm -p 9000:9000 -v $(pwd)/example/config.yaml:/app/config.yaml:z vdbulcke/cert-monitor:0.2.0
+podman run -d --rm -p 9000:9000 -v $(pwd)/example/config.yaml:/app/config.yaml:z vdbulcke/cert-monitor:1.0.0
 ```
 
 ## Configuration

@@ -60,7 +60,7 @@ release:
 
     repo: https://hub.docker.com/repository/docker/vdbulcke/cert-monitor/general
     ```bash
-    docker pull vdbulcke/cert-monitor:0.3.0
+    docker pull vdbulcke/cert-monitor:1.0.0
     ```
 
   # # Footer template for the release body.
