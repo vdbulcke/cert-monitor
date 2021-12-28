@@ -54,6 +54,24 @@ var (
 		},
 	)
 
+	promMetricRemoteJWKCertificateExpirationSeconds = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Namespace: "certmonitor",
+			Name:      "remote_jwk_certificate_expiration_timestamp_seconds",
+			Help:      "Expiration Date of Certificate as Unix Timestamp in seconds",
+		},
+		[]string{
+			// Subject of Certificate
+			"cert_subj",
+			//  Fingerprint of certificate
+			"sha256fingerprint",
+			// jwk 'alg'
+			"alg",
+			// jwk 'kid'
+			"kid",
+		},
+	)
+
 	promMetricCertificateExpirationCount = prometheus.NewGauge(prometheus.GaugeOpts{
 		Namespace: "certmonitor",
 		Name:      "certificate_expiration_count",
@@ -68,4 +86,5 @@ func PrometheusMetricsregister() {
 	prometheus.MustRegister(promMetricCertificateExpirationCount)
 	prometheus.MustRegister(promMetricRemoteCertificateExpirationSeconds)
 	prometheus.MustRegister(promMetricRemoteSAMLMetadataCertificateExpirationSeconds)
+	prometheus.MustRegister(promMetricRemoteJWKCertificateExpirationSeconds)
 }

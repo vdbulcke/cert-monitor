@@ -167,14 +167,40 @@ func (certMonitor *CertMonitor) loadRemoteSAMLMetadataCertificateMetrics(certs [
 
 }
 
+// loadRemoteJWKCertificateMetrics set prometheus metric for JWK certificates
+func (certMonitor *CertMonitor) loadRemoteJWKCertificateMetrics(certs []*x509.Certificate, jwk string, alg string, kid string) {
+
+	for _, cert := range certs {
+		notAfter := cert.NotAfter
+		subj := cert.Subject.String()
+		fingerprint := sha256.Sum256(cert.Raw)
+
+		if certMonitor.logger.IsDebug() {
+			certMonitor.logger.Debug("Setting metric for", "cert_subj", subj, "sha256fingerprint", fmt.Sprintf("%x", fingerprint), "jwk_uri", jwk, "alg", alg, "kid", kid)
+		}
+
+		// record Certificate expiration data as Unix Timesatamp
+		promMetricRemoteJWKCertificateExpirationSeconds.With(prometheus.Labels{
+			"cert_subj":         subj,
+			"sha256fingerprint": fmt.Sprintf("%x", fingerprint),
+			"alg":               alg,
+			"kid":               kid,
+		}).Set(float64(notAfter.Unix()))
+	}
+
+}
+
 // LoadRemoteCertificateMetrics load Certifcate from Remote endpoints
 func (certMonitor *CertMonitor) LoadRemoteCertificateMetrics() {
 	certMonitor.logger.Info("Executing  LoadRemoteCertificateMetrics")
 
 	// reset mertics before re-checking the remote endpoint
-	certMonitor.logger.Debug("Resetting Metric for remote sraping")
+	if certMonitor.logger.IsDebug() {
+		certMonitor.logger.Debug("Resetting Metric for remote sraping")
+	}
 	promMetricRemoteCertificateExpirationSeconds.Reset()
 	promMetricRemoteSAMLMetadataCertificateExpirationSeconds.Reset()
+	promMetricRemoteJWKCertificateExpirationSeconds.Reset()
 
 	// for each endpoints
 	for _, remoteTLSEndpoint := range certMonitor.config.RemoteTLSEndpoints {
@@ -219,6 +245,46 @@ func (certMonitor *CertMonitor) LoadRemoteCertificateMetrics() {
 
 		// setting prometheus metrics for list of certs
 		certMonitor.loadRemoteSAMLMetadataCertificateMetrics(certs, remoteSAMLEndpoint.MetadataURL)
+
+	}
+
+	// for each JWK endpoints
+	for _, remoteJWKEndpoint := range certMonitor.config.RemoteJWKEndpoints {
+
+		// read filter from config
+		url := remoteJWKEndpoint.JWKURL
+		alg := remoteJWKEndpoint.Alg
+		kid := remoteJWKEndpoint.Kid
+		// get the list of certs from endpoint
+		jwks, err := certMonitor.getJWKCertificates(url)
+		if err != nil {
+			certMonitor.logger.Error("Error Getting JWK Certificate", "jwk_uri", url, "err", err)
+			continue
+		}
+
+		// iterate over fetched JWKS
+		for _, j := range jwks {
+
+			// if no filter
+			if alg == "" && kid == "" {
+				// load all certs from each JWKs
+				certMonitor.loadRemoteJWKCertificateMetrics(j.Certs, url, j.Alg, j.Kid)
+
+			} else if alg == "" && j.Kid == kid {
+				// filter on kid
+				certMonitor.loadRemoteJWKCertificateMetrics(j.Certs, url, j.Alg, j.Kid)
+
+			} else if kid == "" && j.Alg == alg {
+				// filter on alg
+				certMonitor.loadRemoteJWKCertificateMetrics(j.Certs, url, j.Alg, j.Kid)
+
+			} else if j.Alg == alg && j.Kid == kid {
+				// apply only on exact alg and kid match
+				certMonitor.loadRemoteJWKCertificateMetrics(j.Certs, url, j.Alg, j.Kid)
+
+			}
+
+		}
 
 	}
 

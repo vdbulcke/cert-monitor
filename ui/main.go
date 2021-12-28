@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/hashicorp/go-hclog"
+	"github.com/vdbulcke/cert-monitor/certmonitor"
 )
 
 func MakeUILogger(debug bool, noText bool) hclog.Logger {
@@ -14,10 +15,10 @@ func MakeUILogger(debug bool, noText bool) hclog.Logger {
 
 	logLevel := hclog.LevelFromString("INFO")
 
-	if debug {
-		logLevel = hclog.LevelFromString("DEBUG")
-	} else if noText {
+	if noText {
 		logLevel = hclog.LevelFromString("ERROR")
+	} else if debug {
+		logLevel = hclog.LevelFromString("DEBUG")
 	}
 
 	// Set log file if defined
@@ -68,5 +69,57 @@ func (u *CertMonitorUI) PrintX509CertList(certs []*x509.Certificate, skew int) {
 	for i, cert := range certs {
 		u.PrintX509Cert(cert, i, skew)
 
+	}
+}
+
+// JWK format
+func (u *CertMonitorUI) PrintJWKCert(jwk *certmonitor.CertMonitorJWK, index int, skew int) {
+	u.Logger.Info("JWK Key", "kid", jwk.Kid, "alg", jwk.Alg)
+
+	// print certs
+	u.PrintX509CertList(jwk.Certs, skew)
+
+}
+
+// PrintJWKCerts prints the List of JWKs and apply the alg, kid, index filter if needed
+func (u *CertMonitorUI) PrintJWKCerts(jwks []*certmonitor.CertMonitorJWK, alg string, kid string, index int, skew int) {
+
+	//
+	if index != -1 {
+		u.Logger.Warn("index cannot be used with jwk and will be ignored, use --alg and/or --kid instead")
+	}
+
+	// check if filter are set
+	if alg == "" && kid == "" {
+
+		// list
+		for _, j := range jwks {
+
+			u.PrintJWKCert(j, index, skew)
+		}
+	} else {
+
+		// apply filter on list
+		for _, j := range jwks {
+
+			if alg == "" {
+
+				if j.Kid == kid {
+					u.PrintJWKCert(j, index, skew)
+				}
+
+			} else if kid == "" {
+
+				if j.Alg == alg {
+					u.PrintJWKCert(j, index, skew)
+				}
+
+			} else if alg != "" && kid != "" {
+				if j.Alg == alg && j.Kid == kid {
+					u.PrintJWKCert(j, index, skew)
+				}
+			}
+
+		}
 	}
 }

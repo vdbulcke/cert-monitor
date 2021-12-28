@@ -31,6 +31,9 @@ type Config struct {
 	// A  list of RemoteSAMLMetdataEndpoints
 	RemoteSAMLMetdataEndpoints []*RemoteSAMLMetdataEndpoint `yaml:"remote_saml_metadata_endpoints"`
 
+	// A  list of RemoteJWKEndpoint
+	RemoteJWKEndpoints []*RemoteJWKEndpoint `yaml:"remote_jwk_endpoints"`
+
 	// Timeout when calling the remote endpoint
 	RemoteEndpointTimeout int `yaml:"remote_endpoint_timeout"`
 
@@ -54,6 +57,13 @@ type RemoteTCPTLSEndpoint struct {
 // RemoteSAMLMetdataEndpoint a remote URL exposing SAML Metadata
 type RemoteSAMLMetdataEndpoint struct {
 	MetadataURL string `yaml:"url" validate:"required"`
+}
+
+// RemoteJWKEndpoint a remote URL exposing JSON Web Keys
+type RemoteJWKEndpoint struct {
+	JWKURL string `yaml:"url" validate:"required"`
+	Alg    string `yaml:"alg"`
+	Kid    string `yaml:"kid"`
 }
 
 // CertMonitor Cert Monitor Object
