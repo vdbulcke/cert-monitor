@@ -13,7 +13,7 @@ builds:
     goos:
       - linux
       - darwin
-      # - windows
+      - windows
     goarch:
       - amd64
       - arm64
@@ -31,6 +31,10 @@ archives:
       windows: Windows
       386: i386
       amd64: x86_64
+    ## use zip for windows release
+    format_overrides:
+      - goos: windows
+        format: zip
     files:
     - LICENSE
 
@@ -60,7 +64,7 @@ release:
 
     repo: https://hub.docker.com/repository/docker/vdbulcke/cert-monitor/general
     ```bash
-    docker pull vdbulcke/cert-monitor:1.0.0
+    docker pull vdbulcke/cert-monitor:1.1.0
     ```
 
   # # Footer template for the release body.
