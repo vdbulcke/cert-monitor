@@ -24,3 +24,7 @@ release-skip-publish:
 
 release-snapshot: 
 	goreleaser release --rm-dist --skip-publish --snapshot
+
+gen-doc: 
+	goreleaser build --rm-dist --snapshot
+	./dist/cert-monitor_linux_amd64/cert-monitor documentation --dir ./doc

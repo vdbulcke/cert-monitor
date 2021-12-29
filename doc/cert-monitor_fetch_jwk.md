@@ -1,24 +1,24 @@
-## cert-monitor fetch tcp
+## cert-monitor fetch jwk
 
-fetch certificates from remote tcp endpoint
+fetch certificates from remote JWKs endpoint
 
 ```
-cert-monitor fetch tcp [flags]
+cert-monitor fetch jwk [flags]
 ```
 
 ### Examples
 
 ```
- cert-monitor fetch tcp --address google.com --port 443
+ cert-monitor fetch jwk -j https://idp.iamfas.belgium.be/fas/oauth2/connect/jwk_uri
 ```
 
 ### Options
 
 ```
-  -a, --address string   Remote host address
-  -h, --help             help for tcp
-  -p, --port int         Remote host port
-      --sni string       TLS Server Name Identifier
+      --alg string       JWK Algorithm (alg)
+  -h, --help             help for jwk
+  -j, --jwk-url string   JWK url
+      --kid string       JWK Key ID (kid)
 ```
 
 ### Options inherited from parent commands
