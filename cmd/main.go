@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -25,7 +26,10 @@ x509 certificates as prometheus metrics`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		// Root command does nothing
-		cmd.Help()
+		err := cmd.Help()
+		if err != nil {
+			log.Fatal(err)
+		}
 		os.Exit(1)
 	},
 }

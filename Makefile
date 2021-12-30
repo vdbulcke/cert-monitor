@@ -1,6 +1,6 @@
 
 
-.PHONY:  test scan build build-snapshot release-skip-publish release-snapshot
+.PHONY:  test scan build build-snapshot release-skip-publish release-snapshot gen-doc lint
 
 
 test: 
@@ -28,3 +28,6 @@ release-snapshot:
 gen-doc: 
 	goreleaser build --rm-dist --snapshot
 	./dist/cert-monitor_linux_amd64/cert-monitor documentation --dir ./doc
+
+lint: 
+	golangci-lint run ./... 

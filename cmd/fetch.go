@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"crypto/x509"
+	"log"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -31,8 +32,11 @@ var fetchCmd = &cobra.Command{
 	// Long: "",
 	Run: func(cmd *cobra.Command, args []string) {
 
-		// Root command does nothing
-		cmd.Help()
+		// command does nothing
+		err := cmd.Help()
+		if err != nil {
+			log.Fatal(err)
+		}
 		os.Exit(1)
 	},
 }

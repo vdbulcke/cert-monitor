@@ -95,14 +95,22 @@ func NewServer(config *certmonitor.Config, logger hclog.Logger) {
 	// trap sigterm or interupt and gracefully shutdown the server
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
-	signal.Notify(c, os.Kill)
+	// signal.Notify(c, os.Kill)
 
 	// Block until a signal is received.
 	sig := <-c
 	logger.Info("Got signal", "sig", sig)
 
 	// gracefully shutdown the server, waiting max 30 seconds for current operations to complete
-	ctx, _ := context.WithTimeout(context.Background(), 30*time.Second)
-	httpServer.Shutdown(ctx)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer func() {
+		// extra handling here
+		cancel()
+	}()
+
+	err := httpServer.Shutdown(ctx)
+	if err != nil {
+		logger.Error("failure while shutting down server", "error", err)
+	}
 
 }

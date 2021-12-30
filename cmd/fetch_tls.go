@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"log"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -20,7 +21,10 @@ func init() {
 	fetchTlsCmd.Flags().StringVarP(&sni, "sni", "", "", "TLS Server Name Identifier")
 
 	// required flags
-	fetchTlsCmd.MarkFlagRequired("url")
+	err := fetchTlsCmd.MarkFlagRequired("url")
+	if err != nil {
+		log.Fatal(err)
+	}
 
 }
 

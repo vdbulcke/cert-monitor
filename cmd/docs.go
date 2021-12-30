@@ -14,7 +14,10 @@ func init() {
 	rootCmd.AddCommand(mdGenCmd)
 	// add flags to sub command
 	mdGenCmd.Flags().StringVarP(&docDir, "dir", "", "./doc", "Directory where to generate the doc")
-	mdGenCmd.MarkFlagRequired("dir")
+	err := mdGenCmd.MarkFlagRequired("dir")
+	if err != nil {
+		log.Fatal(err)
+	}
 	// rootCmd.DisableSuggestions = true
 }
 

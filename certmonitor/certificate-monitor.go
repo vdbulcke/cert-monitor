@@ -9,52 +9,20 @@ import (
 	"io/ioutil"
 	"os"
 	"strconv"
-	"time"
 
 	"github.com/carlescere/scheduler"
 	"github.com/prometheus/client_golang/prometheus"
 )
-
-func (certMonitor *CertMonitor) checkCertificate(certRaw string, clockSkewDays int) bool {
-
-	certPem, _ := pem.Decode([]byte(certRaw))
-	if certPem == nil {
-		certMonitor.logger.Error("failed to parse certificate PEM")
-		return false
-	}
-	cert, err := x509.ParseCertificate(certPem.Bytes)
-	if err != nil {
-		certMonitor.logger.Error("failed to parse certificate", "error", err)
-		return false
-	}
-
-	// build time skew
-	now := time.Now()
-	// skew := 10
-	skew := time.Duration(clockSkewDays)
-	skewDate := now.Add(time.Hour * 24 * skew)
-
-	if skewDate.After(cert.NotAfter) {
-		certMonitor.logger.Error("Cert Expired", "subject", cert.Subject.String(), "Skew Date", skewDate, "NotAfter", cert.NotAfter)
-		return false
-
-	}
-
-	if now.Before(cert.NotBefore) {
-		certMonitor.logger.Error("Cert Not yet valid", "subject", cert.Subject.String(), "NotBefore", cert.NotBefore)
-		return false
-
-	}
-
-	return true
-}
 
 // ScheduleCheckCertificatesJob Check certificate in Dir
 func (certMonitor *CertMonitor) ScheduleCheckCertificatesJob() {
 	certMonitor.logger.Info("Starting Scheduler")
 	hours := certMonitor.config.ScheduleJobHours
 
-	scheduler.Every(hours).Hours().Run(certMonitor.LoadRemoteCertificateMetrics)
+	_, err := scheduler.Every(hours).Hours().Run(certMonitor.LoadRemoteCertificateMetrics)
+	if err != nil {
+		certMonitor.logger.Error("fail to start scheduler", "error", err)
+	}
 }
 
 // getX509CertFromFile  Parse Certificate from file and return X509Certificate or error

@@ -17,7 +17,10 @@ func init() {
 	serverCmd.Flags().StringVarP(&configFilename, "config", "c", "", "cert-monitor server config file")
 
 	// required flags
-	serverCmd.MarkFlagRequired("config")
+	err := serverCmd.MarkFlagRequired("config")
+	if err != nil {
+		log.Fatal(err)
+	}
 
 }
 

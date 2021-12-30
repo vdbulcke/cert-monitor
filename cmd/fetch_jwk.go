@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"log"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -22,7 +23,10 @@ func init() {
 	fetchJWKCmd.Flags().StringVarP(&kid, "kid", "", "", "JWK Key ID (kid)")
 
 	// required flags
-	fetchSAMLCmd.MarkFlagRequired("jwk-url")
+	err := fetchSAMLCmd.MarkFlagRequired("jwk-url")
+	if err != nil {
+		log.Fatal(err)
+	}
 
 }
 
