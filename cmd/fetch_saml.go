@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"log"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -19,10 +18,8 @@ func init() {
 	fetchSAMLCmd.Flags().StringVarP(&metadataUrl, "metadata-url", "m", "", "SAML metadata url")
 
 	// required flags
-	err := fetchSAMLCmd.MarkFlagRequired("metadata-url")
-	if err != nil {
-		log.Fatal(err)
-	}
+	//nolint
+	fetchSAMLCmd.MarkFlagRequired("metadata-url")
 
 }
 

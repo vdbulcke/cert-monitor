@@ -27,10 +27,8 @@ func init() {
 		log.Fatal(err)
 	}
 
-	err = fetchTCPCmd.MarkFlagRequired("port")
-	if err != nil {
-		log.Fatal(err)
-	}
+	//nolint
+	fetchTCPCmd.MarkFlagRequired("port")
 
 }
 
