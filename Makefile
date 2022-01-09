@@ -35,5 +35,9 @@ gen-doc:
 changelog: 
 	git-chglog -o CHANGELOG.md 
 
+.PHONY: dev-doc-site
+dev-doc-site: 
+	podman  run --rm -it -p 8000:8000 -v ${PWD}/www:/docs:z squidfunk/mkdocs-material 
+
 lint: 
 	golangci-lint run ./... 
