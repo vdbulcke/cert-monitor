@@ -21,7 +21,7 @@ builds:
       # - 386
     ldflags:
       ## auto inject commit and version at build time
-      - -X github.com/vdbulcke/cert-monitor/cmd.GitCommit={{ .ShortCommit }} -X github.com/vdbulcke/cert-monitor/cmd.Version={{ .Version }} 
+      - -X github.com/vdbulcke/cert-monitor/cmd.GitCommit={{ .ShortCommit }} -X github.com/vdbulcke/cert-monitor/cmd.Version={{ .Version }}  -X github.com/vdbulcke/cert-monitor/cmd.Date={{ .CommitDate }} -X github.com/vdbulcke/cert-monitor/cmd.BuiltBy=goreleaser
 archives:
   - 
     replacements:
