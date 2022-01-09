@@ -2,6 +2,8 @@
 
 .PHONY:  test scan build build-snapshot release-skip-publish release-snapshot gen-doc lint
 
+.PHONY: prepare-release 
+prepare-release: lint scan release-skip-publish
 
 test: 
 	cd certmonitor/ && go test -run ''
