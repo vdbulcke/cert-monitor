@@ -6,12 +6,15 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/vdbulcke/cert-monitor/certmonitor"
 	"github.com/vdbulcke/cert-monitor/ui"
 )
 
+// args variables
 var noText bool
 var index int
 var skew int
+var skipTlsValidation bool
 
 func init() {
 	// bind to root command
@@ -19,6 +22,7 @@ func init() {
 
 	// add flags to sub command
 	fetchCmd.PersistentFlags().BoolVarP(&noText, "no-text", "", false, "Don't display test (only PEM)")
+	fetchCmd.PersistentFlags().BoolVarP(&skipTlsValidation, "skip-tls-validation", "", false, "Skip TLS certificate validation")
 	fetchCmd.PersistentFlags().IntVarP(&index, "index", "i", -1, "Index from certificate list")
 	fetchCmd.PersistentFlags().IntVarP(&skew, "skew", "", 90, "Days to check for expiration")
 
@@ -60,4 +64,16 @@ func printFetchedCertificate(ui *ui.CertMonitorUI, certs []*x509.Certificate) {
 	} else {
 		ui.PrintX509CertList(certs, skew)
 	}
+}
+
+// newDefaultClientConfig return a default config
+//  with timeout 5 sec and TLS validation from CLI
+func newDefaultClientConfig() *certmonitor.Config {
+	// creates cert monitor with empty config
+	config := &certmonitor.Config{
+		RemoteEndpointTimeout: 5,
+		SkipTLSValidation:     skipTlsValidation,
+	}
+
+	return config
 }

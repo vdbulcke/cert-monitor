@@ -17,7 +17,7 @@ func (certMonitor *CertMonitor) getCertificateFromRemoteURL(address string, serv
 
 	// skipping the TLS verification endpoint could be self signed
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{
-		InsecureSkipVerify: true,
+		InsecureSkipVerify: certMonitor.config.SkipTLSValidation,
 		ServerName:         servername,
 	}
 

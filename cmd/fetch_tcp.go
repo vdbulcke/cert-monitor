@@ -51,10 +51,9 @@ func fetchTCPHandler(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
-	// creates cert monitor with empty config
-	config := &certmonitor.Config{
-		RemoteEndpointTimeout: 5,
-	}
+	// get CLI client config
+	config := newDefaultClientConfig()
+
 	c := certmonitor.NewCertMonitor(appLogger, config)
 
 	// fetch remote certs

@@ -29,7 +29,14 @@ func (c *CertMonitor) getJWKCertificates(jwkUri string) ([]*CertMonitorJWK, erro
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(c.config.RemoteEndpointTimeout)*time.Second)
 	defer cancel()
 
-	set, err := jwk.Fetch(ctx, jwkUri)
+	// get http client from CertMonitor Config
+	client := c.GetHttpClientWithConfiguration()
+
+	// jwk Options
+	jwkOpts := jwk.WithHTTPClient(&client)
+
+	// fetch and parse the JWK
+	set, err := jwk.Fetch(ctx, jwkUri, jwkOpts)
 	if err != nil {
 		c.logger.Error("Failed to fetch JWK", "uri", jwkUri, "err", err)
 		return jwks, err

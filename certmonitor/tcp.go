@@ -17,7 +17,7 @@ func (certMonitor *CertMonitor) getCertificateFromRemoteAddress(address string, 
 
 	// open TLS connection
 	conn, err := tls.Dial("tcp", address, &tls.Config{
-		InsecureSkipVerify: true,
+		InsecureSkipVerify: certMonitor.config.SkipTLSValidation,
 		ServerName:         servername,
 	})
 

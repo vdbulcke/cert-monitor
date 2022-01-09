@@ -25,6 +25,23 @@ prometheus_listening_port: 9000
 schedule_job_hours: 12
 
 ##
+## Http Client Option
+##
+## Since Version v1.2.0
+### 
+### RemoteEndpointTimeout: (Optional)
+###   Timeout for waiting for remote endpoints in seconds
+###   Default: 10 sec
+# remote_endpoint_timeout: 5
+
+### SkipTLSValidation: (Optional)
+###   Disable TLS certificate validation
+###   Default: false
+###   WARNING: BREAKING CHANGE for tls and tcp this 
+###            was set to 'true' prior to v1.2.0
+# skip_tls_validation: true
+
+##
 ## Remote TLS endpoint
 ##
 ### List of 'RemoteTLSEndpoints'

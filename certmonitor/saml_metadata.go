@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/x509"
 	"encoding/base64"
-	"net/http"
 	"net/url"
 	"strings"
 
@@ -24,7 +23,10 @@ func (certMonitor *CertMonitor) getSAMLMetadataCertificates(metadataURL string) 
 		return nil, err
 	}
 
-	idpMetadata, err := samlsp.FetchMetadata(context.Background(), http.DefaultClient,
+	// get http client from CertMonitor Config
+	client := certMonitor.GetHttpClientWithConfiguration()
+
+	idpMetadata, err := samlsp.FetchMetadata(context.Background(), &client,
 		*idpMetadataURL)
 	if err != nil {
 		certMonitor.logger.Error("Error fetching metadata", "metadataURL", metadataURL, "err", err)

@@ -39,6 +39,10 @@ type Config struct {
 
 	// Prometheus metrics port
 	PrometheusListeningPort int `yaml:"prometheus_listening_port" validate:"required"`
+
+	// Skip Tls Validation
+	SkipTLSValidation bool `yaml:"skip_tls_validation"`
+	
 }
 
 // RemoteTLSEndpoint a remote tls endpoint to monitor
