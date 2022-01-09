@@ -36,7 +36,7 @@ var fetchTlsCmd = &cobra.Command{
 func fetchTLSHandler(cmd *cobra.Command, args []string) {
 
 	// creates the logger
-	appLogger := ui.MakeUILogger(debug, noText)
+	appLogger := ui.MakeUILogger(debug, noText, noColor)
 
 	// fail fast
 	if index < -1 {

@@ -15,6 +15,7 @@ var noText bool
 var index int
 var skew int
 var skipTlsValidation bool
+var noColor bool
 
 func init() {
 	// bind to root command
@@ -25,6 +26,7 @@ func init() {
 	fetchCmd.PersistentFlags().BoolVarP(&skipTlsValidation, "skip-tls-validation", "", false, "Skip TLS certificate validation")
 	fetchCmd.PersistentFlags().IntVarP(&index, "index", "i", -1, "Index from certificate list")
 	fetchCmd.PersistentFlags().IntVarP(&skew, "skew", "", 90, "Days to check for expiration")
+	fetchCmd.PersistentFlags().BoolVarP(&noColor, "no-color", "", false, "Disable color output")
 
 	// required flags
 

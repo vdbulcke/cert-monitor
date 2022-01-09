@@ -17,13 +17,13 @@ func CheckCertificate(cert *x509.Certificate, clockSkewDays int, logger hclog.Lo
 	skewDate := now.Add(time.Hour * 24 * skew)
 
 	if skewDate.After(cert.NotAfter) {
-		logger.Error("Certifcate Expired", "subject", cert.Subject.String(), "Skew Date", skewDate, "NotAfter", cert.NotAfter)
+		logger.Warn("Certifcate Expired", "subject", cert.Subject.String(), "Skew Date", skewDate, "NotAfter", cert.NotAfter, "Skew Days", clockSkewDays)
 		return false
 
 	}
 
 	if now.Before(cert.NotBefore) {
-		logger.Error("Cert Not yet valid", "subject", cert.Subject.String(), "NotBefore", cert.NotBefore)
+		logger.Warn("Cert Not yet valid", "subject", cert.Subject.String(), "NotBefore", cert.NotBefore)
 		return false
 
 	}

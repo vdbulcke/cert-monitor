@@ -43,7 +43,7 @@ var fetchTCPCmd = &cobra.Command{
 func fetchTCPHandler(cmd *cobra.Command, args []string) {
 
 	// creates the logger
-	appLogger := ui.MakeUILogger(debug, noText)
+	appLogger := ui.MakeUILogger(debug, noText, noColor)
 
 	// fail fast
 	if index < -1 {

@@ -38,7 +38,7 @@ var fetchJWKCmd = &cobra.Command{
 func fetchJWKHandler(cmd *cobra.Command, args []string) {
 
 	// creates the logger
-	appLogger := ui.MakeUILogger(debug, noText)
+	appLogger := ui.MakeUILogger(debug, noText, noColor)
 
 	// get CLI client config
 	config := newDefaultClientConfig()

@@ -9,7 +9,7 @@ import (
 	"github.com/vdbulcke/cert-monitor/certmonitor"
 )
 
-func MakeUILogger(debug bool, noText bool) hclog.Logger {
+func MakeUILogger(debug bool, noText bool, noColor bool) hclog.Logger {
 	// Create Logger
 	var appLogger hclog.Logger
 
@@ -22,13 +22,18 @@ func MakeUILogger(debug bool, noText bool) hclog.Logger {
 	}
 
 	// Set log file if defined
-
-	appLogger = hclog.New(&hclog.LoggerOptions{
-		Name:  "cert-monitor",
-		Level: logLevel,
-		Color: hclog.AutoColor,
-		// JSONFormat: config.LogJSONFormat,
-	})
+	if noColor {
+		appLogger = hclog.New(&hclog.LoggerOptions{
+			Name:  "cert-monitor",
+			Level: logLevel,
+		})
+	} else {
+		appLogger = hclog.New(&hclog.LoggerOptions{
+			Name:  "cert-monitor",
+			Level: logLevel,
+			Color: hclog.AutoColor,
+		})
+	}
 
 	return appLogger
 }
