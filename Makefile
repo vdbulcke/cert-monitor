@@ -31,5 +31,9 @@ gen-doc:
 	goreleaser build --rm-dist --snapshot
 	./dist/cert-monitor_linux_amd64/cert-monitor documentation --dir ./doc
 
+.PHONY: changelog
+changelog: 
+	git-chglog -o CHANGELOG.md 
+
 lint: 
 	golangci-lint run ./... 
