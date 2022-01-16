@@ -2,6 +2,12 @@
 ## [Unreleased]
 
 
+<a name="v1.2.1"></a>
+## [v1.2.1] - 2022-01-16
+### Bug Fixes
+- 60475ec - Handle non pem cert in static dir [#13](https://github.com/vdbulcke/cert-monitor/issues/13)
+
+
 <a name="v1.2.0"></a>
 ## [v1.2.0] - 2022-01-09
 ### Features
@@ -62,7 +68,8 @@ Add 'skip_tls_validation: true' to your config
 <a name="v0.1.0"></a>
 ## v0.1.0 - 2021-04-02
 
-[Unreleased]: https://github.com/vdbulcke/cert-monitor/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/vdbulcke/cert-monitor/compare/v1.2.1...HEAD
+[v1.2.1]: https://github.com/vdbulcke/cert-monitor/compare/v1.2.0...v1.2.1
 [v1.2.0]: https://github.com/vdbulcke/cert-monitor/compare/v1.1.1...v1.2.0
 [v1.1.1]: https://github.com/vdbulcke/cert-monitor/compare/v1.1.0...v1.1.1
 [v1.1.0]: https://github.com/vdbulcke/cert-monitor/compare/v1.0.0...v1.1.0
