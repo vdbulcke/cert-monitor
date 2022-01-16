@@ -30,9 +30,19 @@ extra:
 nav:
 - Home: index.md
 - install.md
-- cli.md
+- CLI: 
+  - About: cli.md
+  - cli/fetch.md
+  - cli/fetch_tls.md
+  - cli/fetch_tcp.md
+  - cli/fetch_saml.md
+  - cli/fetch_jwk.md
 - server.md
-- contributing.md
+- Contributing: 
+  - contributing/contributing.md
+  - contributing/tooling.md
+  - contributing/git.md
+- changelog.md
 
 markdown_extensions:
   - admonition

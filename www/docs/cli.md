@@ -2,6 +2,8 @@
 
 `cert-monitor` comes with a rich CLI power by [https://github.com/spf13/cobra](https://github.com/spf13/cobra), and thus comes will built in help and completion. 
 
+
+
 ## Getting Help
 Running without argument will display the help page. 
 ```bash
