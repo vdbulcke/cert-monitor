@@ -3,11 +3,7 @@ package certmonitor
 import (
 	"crypto/sha256"
 	"crypto/x509"
-	"encoding/pem"
-	"errors"
 	"fmt"
-	"io/ioutil"
-	"os"
 	"strconv"
 
 	"github.com/carlescere/scheduler"
@@ -23,34 +19,6 @@ func (certMonitor *CertMonitor) ScheduleCheckCertificatesJob() {
 	if err != nil {
 		certMonitor.logger.Error("fail to start scheduler", "error", err)
 	}
-}
-
-// getX509CertFromFile  Parse Certificate from file and return X509Certificate or error
-func (certMonitor *CertMonitor) getX509CertFromFile(certFile string) (*x509.Certificate, error) {
-	// read cert
-	certRaw, err := ioutil.ReadFile(certFile)
-	if err != nil {
-		certMonitor.logger.Error("Could not read file", "file", certFile, "error", err)
-		return nil, err
-	}
-
-	// Parsing pem
-	certPem, _ := pem.Decode([]byte(certRaw))
-	if certPem == nil {
-		certMonitor.logger.Error("Could not Convert to PEM certificate", "file", certFile)
-		return nil, errors.New("error parsing PEM")
-	}
-
-	// Parse X509
-	cert, err := x509.ParseCertificate(certPem.Bytes)
-	if err != nil {
-		certMonitor.logger.Error("Could not parse X509 certificate", "file", certFile)
-		return nil, err
-	}
-
-	// return X509 cert
-	return cert, nil
-
 }
 
 // loadRemoteCertsMetrics set the actual prometheus metrics
@@ -81,23 +49,12 @@ func (certMonitor *CertMonitor) loadRemoteCertsMetrics(certs []*x509.Certificate
 }
 
 // LoadLocalCertificateMetrics Loads Certificate metric from the local dir
-func (certMonitor *CertMonitor) LoadLocalCertificateMetrics() {
+func (certMonitor *CertMonitor) loadLocalCertificateDirMetrics(certs []*x509.Certificate) {
 
-	// load files in dir
-	files, err := ioutil.ReadDir(certMonitor.config.CertificatesDir)
-	if err != nil {
-		certMonitor.logger.Error("Could list file in dir", "dir", certMonitor.config.CertificatesDir, "error", err)
-		os.Exit(1)
-	}
-
-	for _, file := range files {
-		filename := certMonitor.config.CertificatesDir + "/" + file.Name()
-		cert, err := certMonitor.getX509CertFromFile(filename)
-		if err != nil {
-			certMonitor.logger.Error("Could not parse X509 certificate", "file", filename)
-			os.Exit(1)
+	for _, cert := range certs {
+		if certMonitor.logger.IsDebug() {
+			certMonitor.logger.Debug("loading metric for static dir certificate", "cert", cert.Subject.String())
 		}
-
 		notAfter := cert.NotAfter
 		subj := cert.Subject.String()
 		fingerprint := sha256.Sum256(cert.Raw)
@@ -110,6 +67,18 @@ func (certMonitor *CertMonitor) LoadLocalCertificateMetrics() {
 
 	}
 
+}
+
+// LoadStaticMetrics loads one time static metric
+func (certMonitor *CertMonitor) LoadStaticMetrics() error {
+
+	certs, err := certMonitor.getCertificateFromDir(certMonitor.config.CertificatesDir)
+	if err != nil {
+		return err
+	}
+
+	certMonitor.loadLocalCertificateDirMetrics(certs)
+	return nil
 }
 
 // loadRemoteSAMLMetadataCertificateMetrics set the actual prometheus metrics

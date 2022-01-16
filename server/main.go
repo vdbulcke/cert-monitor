@@ -43,7 +43,10 @@ func NewServer(config *certmonitor.Config, logger hclog.Logger) {
 	// if certificate dir is defined
 	if localCertificateDirectory {
 		// Set expiration metrics
-		certMonitor.LoadLocalCertificateMetrics()
+		err := certMonitor.LoadStaticMetrics()
+		if err != nil {
+			logger.Error("fail to load static metric", "error", err)
+		}
 	}
 
 	// load remote TLS endpoints
