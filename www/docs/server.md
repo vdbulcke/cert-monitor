@@ -212,9 +212,11 @@ The basic configuration takes an `url` where the XML SAML Metadata is hosted.
 ###     alg: (optional)
 ###     ## Filter on 'kid'
 ###     kid: (optional)
+###     ## Filter on 'kty' (Key Type) since v 1.3.0
+###     kty: (optional)
 remote_jwk_endpoints:
 - url: https://idp.iamfas.belgium.be/fas/oauth2/connect/jwk_uri
-  alg: RS256
+  kty: RSA
 
 ```
 
@@ -229,6 +231,7 @@ Optionally, you can specify one or more filters (if more than one key is hosted 
 
 * `alg`: only process JSON Web Key matching the corresponding algorithm
 * `kid`: only process  JSON Web Key matching the corresponding Key ID
+* `kty`: only process  JSON Web Key matching the corresponding Key Type
 
 !!! caution
     If you are **not** using this feature, comment out the whole block including `remote_jwk_endpoints: `, OR set the Remote JWK option to an empty list `remote_jwk_endpoints: []`

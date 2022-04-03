@@ -14,7 +14,6 @@ cert-monitor fetch jwk
 
 ```
 ```            
-Error: required flag(s) "jwk-url" not set
 Usage:
   cert-monitor fetch jwk [flags]
 
@@ -26,6 +25,7 @@ Flags:
   -h, --help             help for jwk
   -j, --jwk-url string   JWK url
       --kid string       JWK Key ID (kid)
+      --kty string       JWK Key Type (kty)
 
 Global Flags:
   -d, --debug                 debug mode enabled
@@ -34,8 +34,6 @@ Global Flags:
       --no-text               Don't display test (only PEM)
       --skew int              Days to check for expiration (default 90)
       --skip-tls-validation   Skip TLS certificate validation
-
-required flag(s) "jwk-url" not set
 
 ```
 
@@ -50,3 +48,7 @@ Only display JSON Web Key matching the algorithm specified.
 ### `--kid string` 
 
 Only display JSON Web Key matching the KeyID specified.
+
+### `--kty string` 
+
+Only display JSON Web Key matching the KeyType specified.
