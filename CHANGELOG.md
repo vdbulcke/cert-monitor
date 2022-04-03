@@ -2,6 +2,12 @@
 ## [Unreleased]
 
 
+<a name="v1.3.0"></a>
+## [v1.3.0] - 2022-04-03
+### Features
+- 1ab2582 - add 'kty' filter ([#14](https://github.com/vdbulcke/cert-monitor/issues/14))
+
+
 <a name="v1.2.1"></a>
 ## [v1.2.1] - 2022-01-16
 ### Bug Fixes
@@ -68,7 +74,8 @@ Add 'skip_tls_validation: true' to your config
 <a name="v0.1.0"></a>
 ## v0.1.0 - 2021-04-02
 
-[Unreleased]: https://github.com/vdbulcke/cert-monitor/compare/v1.2.1...HEAD
+[Unreleased]: https://github.com/vdbulcke/cert-monitor/compare/v1.3.0...HEAD
+[v1.3.0]: https://github.com/vdbulcke/cert-monitor/compare/v1.2.1...v1.3.0
 [v1.2.1]: https://github.com/vdbulcke/cert-monitor/compare/v1.2.0...v1.2.1
 [v1.2.0]: https://github.com/vdbulcke/cert-monitor/compare/v1.1.1...v1.2.0
 [v1.1.1]: https://github.com/vdbulcke/cert-monitor/compare/v1.1.0...v1.1.1
