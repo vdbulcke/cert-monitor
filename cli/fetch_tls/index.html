@@ -1,0 +1,811 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Cert-Monitor a tool for discovering and monitoring X509 Certificates">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.8">
+    
+    
+      
+        <title>Fetch TLS (HTTPS) - Cert-Monitor</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.644de097.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#fetch-tls-https" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Cert-Monitor" class="md-header__button md-logo" aria-label="Cert-Monitor" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Cert-Monitor
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Fetch TLS (HTTPS)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="light-blue" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/vdbulcke/cert-monitor" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    vdbulcke/cert-monitor
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Cert-Monitor" class="md-nav__button md-logo" aria-label="Cert-Monitor" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Cert-Monitor
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/vdbulcke/cert-monitor" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    vdbulcke/cert-monitor
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../install/" class="md-nav__link">
+        Install
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          CLI
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="CLI" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          CLI
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fetch/" class="md-nav__link">
+        Fetch
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Fetch TLS (HTTPS)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Fetch TLS (HTTPS)
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-sni-string" class="md-nav__link">
+    --sni string
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fetch_tcp/" class="md-nav__link">
+        Fetch TCP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fetch_saml/" class="md-nav__link">
+        Fetch SAML
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fetch_jwk/" class="md-nav__link">
+        Fetch JWK
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../server/" class="md-nav__link">
+        Server
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Contributing
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Contributing" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Contributing
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/contributing/" class="md-nav__link">
+        Contributing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/tooling/" class="md-nav__link">
+        Tooling
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/git/" class="md-nav__link">
+        Git
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../changelog/" class="md-nav__link">
+        Changelog
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-sni-string" class="md-nav__link">
+    --sni string
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+<a href="https://github.com/vdbulcke/cert-monitor/edit/master/docs/cli/fetch_tls.md" title="Edit this page" class="md-content__button md-icon">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+</a>
+
+
+
+<h1 id="fetch-tls-https">Fetch TLS (HTTPS)<a class="headerlink" href="#fetch-tls-https" title="Permanent link">&para;</a></h1>
+<p>Fetch the TLS certificate chain exposed on remote endpoint using <code>cert-monitor fetch tls --url [URL]</code>.</p>
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
+<p><div class="highlight"><pre><span></span><code>cert-monitor fetch tls 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Error: required flag(s) &quot;url&quot; not set
+Usage:
+  cert-monitor fetch tls [flags]
+
+Examples:
+ cert-monitor fetch tls --url https://google.com
+
+Flags:
+  -h, --help         help for tls
+      --sni string   TLS Server Name Identifier
+  -u, --url string   remote TLS endpoint
+
+Global Flags:
+  -d, --debug                 debug mode enabled
+  -i, --index int             Index from certificate list (default -1)
+      --no-color              Disable color output
+      --no-text               Don&#39;t display test (only PEM)
+      --skew int              Days to check for expiration (default 90)
+      --skip-tls-validation   Skip TLS certificate validation
+
+required flag(s) &quot;url&quot; not set
+</code></pre></div></p>
+<h2 id="-sni-string"><code>--sni string</code><a class="headerlink" href="#-sni-string" title="Permanent link">&para;</a></h2>
+<p>Optionally, you can specify a Server Name Indicator using <code>--sni string</code>:</p>
+<p>Example:</p>
+<ul>
+<li>
+<p>default 
+<div class="highlight"><pre><span></span><code>cert-monitor fetch tls --url https://idp.iamfas.belgium.be/  --index 0 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>2022-01-16T16:04:31.915+0100 [INFO]  cert-monitor: X509 Certificate: index=0 Subject=&quot;CN=idp.iamfas.belgium.be,O=Federale Overheidsdienst Beleid en Ondersteuning,L=BRUSSEL,C=BE&quot;
+2022-01-16T16:04:31.915+0100 [INFO]  cert-monitor: X509 Certificate: index=0 Issuer=&quot;CN=GEANT OV RSA CA 4,O=GEANT Vereniging,C=NL&quot;
+2022-01-16T16:04:31.915+0100 [INFO]  cert-monitor: X509 Certificate: index=0 NotBefore=&quot;2021-09-17 00:00:00 +0000 UTC&quot;
+2022-01-16T16:04:31.915+0100 [INFO]  cert-monitor: X509 Certificate: index=0 NotAfter=&quot;2022-09-17 23:59:59 +0000 UTC&quot;
+2022-01-16T16:04:31.915+0100 [INFO]  cert-monitor: X509 Certificate: index=0
+-----BEGIN CERTIFICATE-----
+MIIHcjCCBVqgAwIBAgIRANtvSR/N24RkUXflQCUxPKkwDQYJKoZIhvcNAQEMBQAw
+RDELMAkGA1UEBhMCTkwxGTAXBgNVBAoTEEdFQU5UIFZlcmVuaWdpbmcxGjAYBgNV
+BAMTEUdFQU5UIE9WIFJTQSBDQSA0MB4XDTIxMDkxNzAwMDAwMFoXDTIyMDkxNzIz
+NTk1OVowejELMAkGA1UEBhMCQkUxEDAOBgNVBAcTB0JSVVNTRUwxOTA3BgNVBAoT
+MEZlZGVyYWxlIE92ZXJoZWlkc2RpZW5zdCBCZWxlaWQgZW4gT25kZXJzdGV1bmlu
+ZzEeMBwGA1UEAxMVaWRwLmlhbWZhcy5iZWxnaXVtLmJlMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAwT0fn/QXRrabgJt3tD5UKrRl4PSdcxudkTRc/uqE
+EVWThbaR6tz9LJ67cAcZA3DhtcfEYMiLPc2+uKzbMvdYC/1kKN17VkSdwrpJBq5/
+hWOsjzpl4elCXu89xvVpLoDc0RIo6f84hU1qLbIsuAvOL4HDwsEyxa/geSbSplc6
+ubI2zquR2sgXYccD/WL//oTLHm8mM3HsMOY4EOtOOAv41CTy5JTHL8U7B1gIKdgs
+IhakD/y68KSLofjnLh2OcElcjftb0uSmufoMM290iRInWMAGJj0gYlz8pV2LGQnL
+eMyJ8sQAAnue+omu5JUtlWIEa/aZsNtY5vRhBq/dv9BqOwIDAQABo4IDJzCCAyMw
+HwYDVR0jBBgwFoAUbx01SRBsMvpZoJ68iugflb5xegwwHQYDVR0OBBYEFMQizTIG
+avbiNNKdar9E1uaPn1y1MA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0G
+A1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjBJBgNVHSAEQjBAMDQGCysGAQQB
+sjEBAgJPMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMAgG
+BmeBDAECAjA/BgNVHR8EODA2MDSgMqAwhi5odHRwOi8vR0VBTlQuY3JsLnNlY3Rp
+Z28uY29tL0dFQU5UT1ZSU0FDQTQuY3JsMHUGCCsGAQUFBwEBBGkwZzA6BggrBgEF
+BQcwAoYuaHR0cDovL0dFQU5ULmNydC5zZWN0aWdvLmNvbS9HRUFOVE9WUlNBQ0E0
+LmNydDApBggrBgEFBQcwAYYdaHR0cDovL0dFQU5ULm9jc3Auc2VjdGlnby5jb20w
+ggF9BgorBgEEAdZ5AgQCBIIBbQSCAWkBZwB2AEalVet1+pEgMLWiiWn0830RLEF0
+vv1JuIWr8vxw/m1HAAABe/KdiIgAAAQDAEcwRQIgDDKlAXkEAiGiX5s9Wh6F9DxQ
+vYe6BBwrT3oG1hjxgpgCIQCYJrY2RoaHeXAJHR7XO4SHy8Nj4UNloGjcJAtvCk4A
+CwB1AEHIyrHfIkZKEMahOglCh15OMYsbA+vrS8do8JBilgb2AAABe/KdiFsAAAQD
+AEYwRAIgLFgVZZcKZYZX6YSSMBqUHBOh/wioHwiIAQMilGbR/1sCIFTVymlhu0Xg
+H5edx0DztaHpr8X1xToohgheHt+woJWzAHYAKXm+8J45OSHwVnOfY6V35b5XfZxg
+Cvj5TV0mXCVdx4QAAAF78p2ILQAABAMARzBFAiEAhQx+AA0TZkh+vdZCq65RV4WA
+jpMIZ+Roif+T6i7wvJ8CIG2AhlmF1PuN9G9icueyrI3L/Rj6Q0tFXh+a9nq9SA2K
+MCAGA1UdEQQZMBeCFWlkcC5pYW1mYXMuYmVsZ2l1bS5iZTANBgkqhkiG9w0BAQwF
+AAOCAgEAAInPj5QBiMVGfN2637JiK7YQILAP14KXDwjldAwaVch7ahitj0SPLGlI
+foGjYy0KYlaPZMH+ppLL30TTpmczAVY8s/Jz3MxkTv805Lwgy6YyNkpeCY5IcfAz
+4sSuOxXl/KfDuqeIVGYFieO4EbkZGk0ZXqbWnYIyJXu/l5e9borgWxK1/a5lO9PE
+O/8yB4JDn7OzpgqFKUzT/EDhFqFuq5OW52OaA1TRBlDykZDR/ifzmAemgMPHXVrL
+Bdg19FzxbQCP3EkYEnU9xLb09blOPFiP9rCoK7y3KgFX6XfvRNKaOu9XlDVnIBuG
+l6kLndnLbjJqt5qkF2+m81FspHdWVtyuhsVY5KA3A3Ajp/2VJ1hZmVqE0luxWrNV
+hFykUreQ8mWEvs7f6MoNwUJ84cBS4RGXx+VK6d3+/icbD3xMtYE1xu0qzev4WmzR
+vrnQwPOpvTiQa30bdTLwfX7cFIdxxylEU0LlNyYjrjpoozGxqiwc6Q9eZxQn5mdm
+IdDRXDBiX4PRcyYdMCA1bXrKmivVJ82RF+Josd1Kc5yrcOHQ03vNVG3gYo5/Tt9k
+53ofP84lmC9q6lXcxfx+55tUqJwpF/wZINbXngjxxCGk57J6b9SvXtzjC2K6cRlM
+Whz8mvWXyplKJu+raza9l+J6xQ0Y1ni+KqcklQ0qpHJTVM2hXqw=
+-----END CERTIFICATE-----
+</code></pre></div></p>
+</li>
+<li>
+<p>Specifying <code>--sni "*.iamfas.belgium.be"</code>
+<div class="highlight"><pre><span></span><code>cert-monitor fetch tls --url https://idp.iamfas.belgium.be/  --index 0 --sni &quot;*.iamfas.belgium.be&quot;
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>2022-01-16T16:04:41.997+0100 [INFO]  cert-monitor: X509 Certificate: index=0 Subject=&quot;CN=*.iamfas.belgium.be,O=Federale Overheidsdienst Beleid en Ondersteuning,L=BRUSSEL,C=BE&quot;
+2022-01-16T16:04:41.997+0100 [INFO]  cert-monitor: X509 Certificate: index=0 Issuer=&quot;CN=GEANT OV RSA CA 4,O=GEANT Vereniging,C=NL&quot;
+2022-01-16T16:04:41.997+0100 [INFO]  cert-monitor: X509 Certificate: index=0 NotBefore=&quot;2021-04-26 00:00:00 +0000 UTC&quot;
+2022-01-16T16:04:41.997+0100 [INFO]  cert-monitor: X509 Certificate: index=0 NotAfter=&quot;2022-04-26 23:59:59 +0000 UTC&quot;
+2022-01-16T16:04:41.997+0100 [INFO]  cert-monitor: X509 Certificate: index=0
+-----BEGIN CERTIFICATE-----
+MIIHgDCCBWigAwIBAgIQA1GD0+6qSr600cFp68H79zANBgkqhkiG9w0BAQwFADBE
+MQswCQYDVQQGEwJOTDEZMBcGA1UEChMQR0VBTlQgVmVyZW5pZ2luZzEaMBgGA1UE
+AxMRR0VBTlQgT1YgUlNBIENBIDQwHhcNMjEwNDI2MDAwMDAwWhcNMjIwNDI2MjM1
+OTU5WjB4MQswCQYDVQQGEwJCRTEQMA4GA1UEBxMHQlJVU1NFTDE5MDcGA1UEChMw
+RmVkZXJhbGUgT3ZlcmhlaWRzZGllbnN0IEJlbGVpZCBlbiBPbmRlcnN0ZXVuaW5n
+MRwwGgYDVQQDDBMqLmlhbWZhcy5iZWxnaXVtLmJlMIIBIjANBgkqhkiG9w0BAQEF
+AAOCAQ8AMIIBCgKCAQEAripD+Q4cuG7TEoGWwh8stMWThKqLfeyiS/w07IMfJPdV
+Him3Rx7ATQamnOWLbrlM3l4N36GpTGRnVH206Fi710ykCrO3ixAGr9ohFvgs4fGA
+o1JGrO7ZffhwzbbrPXG3XUzVDWr7M09/SVLVPz2neRQRM1TxBF/FIHr7ns6TLJy+
+wajVw81nefwNJenMO1iEUoeSk0h7OvExh/Gi/iS5kLqdfvF8rYr0FhVd4Pjpi0je
+g7dEuOSs2t7wLN8hXG36qsI2mtoRedDblgc3bEuGWeLHqcbeGf31S/VQbr2wYwHg
+j3rE0wTulgCZJY+VO54/b6yTb7+ZvNQ1vwGaZ7wdywIDAQABo4IDODCCAzQwHwYD
+VR0jBBgwFoAUbx01SRBsMvpZoJ68iugflb5xegwwHQYDVR0OBBYEFCV/u+hbrjYF
+qjV2jCOXxj4jzRdOMA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1Ud
+JQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjBJBgNVHSAEQjBAMDQGCysGAQQBsjEB
+AgJPMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMAgGBmeB
+DAECAjA/BgNVHR8EODA2MDSgMqAwhi5odHRwOi8vR0VBTlQuY3JsLnNlY3RpZ28u
+Y29tL0dFQU5UT1ZSU0FDQTQuY3JsMHUGCCsGAQUFBwEBBGkwZzA6BggrBgEFBQcw
+AoYuaHR0cDovL0dFQU5ULmNydC5zZWN0aWdvLmNvbS9HRUFOVE9WUlNBQ0E0LmNy
+dDApBggrBgEFBQcwAYYdaHR0cDovL0dFQU5ULm9jc3Auc2VjdGlnby5jb20wMQYD
+VR0RBCowKIITKi5pYW1mYXMuYmVsZ2l1bS5iZYIRaWFtZmFzLmJlbGdpdW0uYmUw
+ggF9BgorBgEEAdZ5AgQCBIIBbQSCAWkBZwB2AEalVet1+pEgMLWiiWn0830RLEF0
+vv1JuIWr8vxw/m1HAAABeQ0UgjAAAAQDAEcwRQIhAJqglT+VzPM1maTHNEw8U+6J
+qxzs/zTYhgf7l1vBAg+AAiB4kROthSGu/boTsPyfWTlJB2dAhw29Yg3TjkUGrXVG
+zAB1AN+lXqtogk8fbK3uuF9OPlrqzaISpGpejjsSwCBEXCpzAAABeQ0UghIAAAQD
+AEYwRAIgAPdT8iDCz2PnetB1m9q+1uZDuaBN/TYqmrQlEqxp1koCIBYxrgmiWbWO
+QZq9E0NKJXmyhtRpklRYJHIfzX6AMU10AHYAVYHUwhaQNgFK6gubVzxT8MDkOHhw
+JQgXL6OqHQcT0wwAAAF5DRSCCwAABAMARzBFAiBKR+PTfYcM8gIQh7BpYj2Hqjh5
+wymZe0lpRWVoTfDHDwIhAN2CGGcNzeJ0zE6MvSFy10g01qpjmmprMPxgQ/GL83li
+MA0GCSqGSIb3DQEBDAUAA4ICAQBItqim3c6+YUx+TpWk4VZuqLBBF03sbFyBIRap
++FEb1bkE23Lfo6U9I3xn+JwFi/Ab0tmJHU9wNguK5pWXtWVxgmdrTkFb2QGrdi2o
+rCwyXtRWIIIIxg0G/q8MqxK+frnAmzBsla2lFFzFv6Dk56SJkxcEsWrz+/HP3o6v
+6y1C5YalRuOBmOvTgwZ3WKLpFnXneKqSqnMXtPrrSPujHtmgJ5rGuWRP1INVf0K7
+uw6nIEfOW37cQaKNHZE1EDUF/RJAjSLDYFawU2JQ6yERc/XR8Ywe1G3opxANirWA
+gl9/IqOq6aCGiEDGsAjyH6rp/t4qp37vgZh9vEMZ+U6chu86UoNUbBa6Y9MP1+mv
+5ma9ApqwWaItU80jsnmCxYvhP20bUDdpkyrnaRpRadFWMmi65pRoQcxwqbiJFSO5
+NT7auXIi6HY6zLVFBexbR4HzaNJHQnxo4fINfh9N2IIbT5mPlWEr2hqwPhC5KDpo
+p/e+yX/DLDipZY0vdUlyxhKllvgVv1v3q9/WXo1zhmEWC3TnaUDx+6auNZ+g4Gxj
+oeBs7KahM3SRL7Xgc5Uw4qa8QN92XbnLOLhD7Ahfo4v5tOf/g8uidRbo7OyruW6r
+l3kmxERpydz+ICxQzqKEfF8R6iYNWKdwhbl/611nEvLXIQBlAfjex63IsmjTOWcj
+emHYqw==
+-----END CERTIFICATE-----
+</code></pre></div></p>
+</li>
+</ul>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../fetch/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Fetch" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Fetch
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../fetch_tcp/" class="md-footer__link md-footer__link--next" aria-label="Next: Fetch TCP" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Fetch TCP
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://github.com/vdbulcke/cert-monitor" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.5e67fbfe.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c44cc438.min.js"></script>
+      
+    
+  </body>
+</html>
