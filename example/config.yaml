@@ -111,9 +111,11 @@ remote_saml_metadata_endpoints:
 ###     alg: (optional)
 ###     ## Filter on 'kid'
 ###     kid: (optional)
+###     ## Filter on 'kty' (Key Type) since v 1.3.0
+###     kty: (optional)
 remote_jwk_endpoints:
 - url: https://idp.iamfas.belgium.be/fas/oauth2/connect/jwk_uri
-  alg: RS256
+  kty: RSA
 
 ##
 ## CertificatesDir

@@ -11,6 +11,7 @@ import (
 var jwkUrl string
 var alg string
 var kid string
+var kty string
 
 func init() {
 	// bind to root command
@@ -19,6 +20,7 @@ func init() {
 	// add flags to sub command
 	fetchJWKCmd.Flags().StringVarP(&jwkUrl, "jwk-url", "j", "", "JWK url")
 	fetchJWKCmd.Flags().StringVarP(&alg, "alg", "", "", "JWK Algorithm (alg)")
+	fetchJWKCmd.Flags().StringVarP(&kty, "kty", "", "", "JWK Key Type (kty)")
 	fetchJWKCmd.Flags().StringVarP(&kid, "kid", "", "", "JWK Key ID (kid)")
 
 	// required flags
@@ -63,6 +65,6 @@ func fetchJWKHandler(cmd *cobra.Command, args []string) {
 	ui := ui.NewCertMonitorUI(appLogger, debug, noText)
 
 	// print the certificates
-	ui.PrintJWKCerts(jwks, alg, kid, index, skew)
+	ui.PrintJWKCerts(jwks, alg, kty, kid, index, skew)
 
 }

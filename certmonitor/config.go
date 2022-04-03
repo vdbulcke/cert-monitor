@@ -42,7 +42,6 @@ type Config struct {
 
 	// Skip Tls Validation
 	SkipTLSValidation bool `yaml:"skip_tls_validation"`
-	
 }
 
 // RemoteTLSEndpoint a remote tls endpoint to monitor
@@ -68,6 +67,7 @@ type RemoteJWKEndpoint struct {
 	JWKURL string `yaml:"url" validate:"required"`
 	Alg    string `yaml:"alg"`
 	Kid    string `yaml:"kid"`
+	Kty    string `yaml:"kty"`
 }
 
 // CertMonitor Cert Monitor Object

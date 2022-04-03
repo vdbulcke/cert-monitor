@@ -105,7 +105,7 @@ func (certMonitor *CertMonitor) loadRemoteSAMLMetadataCertificateMetrics(certs [
 }
 
 // loadRemoteJWKCertificateMetrics set prometheus metric for JWK certificates
-func (certMonitor *CertMonitor) loadRemoteJWKCertificateMetrics(certs []*x509.Certificate, jwk string, alg string, kid string) {
+func (certMonitor *CertMonitor) loadRemoteJWKCertificateMetrics(certs []*x509.Certificate, jwk string, alg string, kty string, kid string) {
 
 	for _, cert := range certs {
 		notAfter := cert.NotAfter
@@ -113,7 +113,7 @@ func (certMonitor *CertMonitor) loadRemoteJWKCertificateMetrics(certs []*x509.Ce
 		fingerprint := sha256.Sum256(cert.Raw)
 
 		if certMonitor.logger.IsDebug() {
-			certMonitor.logger.Debug("Setting metric for", "cert_subj", subj, "sha256fingerprint", fmt.Sprintf("%x", fingerprint), "jwk_uri", jwk, "alg", alg, "kid", kid)
+			certMonitor.logger.Debug("Setting metric for", "cert_subj", subj, "sha256fingerprint", fmt.Sprintf("%x", fingerprint), "jwk_uri", jwk, "alg", alg, "kty", kty, "kid", kid)
 		}
 
 		// record Certificate expiration data as Unix Timesatamp
@@ -122,6 +122,7 @@ func (certMonitor *CertMonitor) loadRemoteJWKCertificateMetrics(certs []*x509.Ce
 			"sha256fingerprint": fmt.Sprintf("%x", fingerprint),
 			"alg":               alg,
 			"kid":               kid,
+			"kty":               kty,
 		}).Set(float64(notAfter.Unix()))
 	}
 
@@ -192,6 +193,7 @@ func (certMonitor *CertMonitor) LoadRemoteCertificateMetrics() {
 		url := remoteJWKEndpoint.JWKURL
 		alg := remoteJWKEndpoint.Alg
 		kid := remoteJWKEndpoint.Kid
+		kty := remoteJWKEndpoint.Kty
 		// get the list of certs from endpoint
 		jwks, err := certMonitor.getJWKCertificates(url)
 		if err != nil {
@@ -202,24 +204,33 @@ func (certMonitor *CertMonitor) LoadRemoteCertificateMetrics() {
 		// iterate over fetched JWKS
 		for _, j := range jwks {
 
-			// if no filter
-			if alg == "" && kid == "" {
-				// load all certs from each JWKs
-				certMonitor.loadRemoteJWKCertificateMetrics(j.Certs, url, j.Alg, j.Kid)
-
-			} else if alg == "" && j.Kid == kid {
-				// filter on kid
-				certMonitor.loadRemoteJWKCertificateMetrics(j.Certs, url, j.Alg, j.Kid)
-
-			} else if kid == "" && j.Alg == alg {
-				// filter on alg
-				certMonitor.loadRemoteJWKCertificateMetrics(j.Certs, url, j.Alg, j.Kid)
-
-			} else if j.Alg == alg && j.Kid == kid {
-				// apply only on exact alg and kid match
-				certMonitor.loadRemoteJWKCertificateMetrics(j.Certs, url, j.Alg, j.Kid)
-
+			// filter kid
+			if kid != "" {
+				if j.Kid != kid {
+					// skip entry
+					continue
+				}
 			}
+
+			// filter kty
+			if kty != "" {
+				if j.Kty != kty {
+					// skip entry
+					continue
+				}
+			}
+
+			// filter alg
+			if alg != "" {
+				if j.Alg != alg {
+					// skip entry
+					continue
+				}
+			}
+
+			// if entry was not skipped by any of the filter, then
+			// load as prometheus metric
+			certMonitor.loadRemoteJWKCertificateMetrics(j.Certs, url, j.Alg, j.Kty, j.Kid)
 
 		}
 

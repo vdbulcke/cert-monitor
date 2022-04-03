@@ -79,7 +79,7 @@ func (u *CertMonitorUI) PrintX509CertList(certs []*x509.Certificate, skew int) {
 
 // JWK format
 func (u *CertMonitorUI) PrintJWKCert(jwk *certmonitor.CertMonitorJWK, index int, skew int) {
-	u.Logger.Info("JWK Key", "kid", jwk.Kid, "alg", jwk.Alg)
+	u.Logger.Info("JWK Key", "kid", jwk.Kid, "alg", jwk.Alg, "kty", jwk.Kty)
 
 	// print certs
 	u.PrintX509CertList(jwk.Certs, skew)
@@ -87,7 +87,7 @@ func (u *CertMonitorUI) PrintJWKCert(jwk *certmonitor.CertMonitorJWK, index int,
 }
 
 // PrintJWKCerts prints the List of JWKs and apply the alg, kid, index filter if needed
-func (u *CertMonitorUI) PrintJWKCerts(jwks []*certmonitor.CertMonitorJWK, alg string, kid string, index int, skew int) {
+func (u *CertMonitorUI) PrintJWKCerts(jwks []*certmonitor.CertMonitorJWK, alg string, kty string, kid string, index int, skew int) {
 
 	//
 	if index != -1 {
@@ -95,7 +95,7 @@ func (u *CertMonitorUI) PrintJWKCerts(jwks []*certmonitor.CertMonitorJWK, alg st
 	}
 
 	// check if filter are set
-	if alg == "" && kid == "" {
+	if alg == "" && kid == "" && kty == "" {
 
 		// list
 		for _, j := range jwks {
@@ -107,23 +107,33 @@ func (u *CertMonitorUI) PrintJWKCerts(jwks []*certmonitor.CertMonitorJWK, alg st
 		// apply filter on list
 		for _, j := range jwks {
 
-			if alg == "" {
-
-				if j.Kid == kid {
-					u.PrintJWKCert(j, index, skew)
-				}
-
-			} else if kid == "" {
-
-				if j.Alg == alg {
-					u.PrintJWKCert(j, index, skew)
-				}
-
-			} else if alg != "" && kid != "" {
-				if j.Alg == alg && j.Kid == kid {
-					u.PrintJWKCert(j, index, skew)
+			// filter kid
+			if kid != "" {
+				if j.Kid != kid {
+					// skip entry
+					continue
 				}
 			}
+
+			// filter kty
+			if kty != "" {
+				if j.Kty != kty {
+					// skip entry
+					continue
+				}
+			}
+
+			// filter alg
+			if alg != "" {
+				if j.Alg != alg {
+					// skip entry
+					continue
+				}
+			}
+
+			// if current entry was not skipped by
+			// any of the filter then print
+			u.PrintJWKCert(j, index, skew)
 
 		}
 	}

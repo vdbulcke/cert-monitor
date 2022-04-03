@@ -69,6 +69,8 @@ var (
 			"alg",
 			// jwk 'kid'
 			"kid",
+			// jwk 'kty'
+			"kty",
 		},
 	)
 

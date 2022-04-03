@@ -14,6 +14,8 @@ type CertMonitorJWK struct {
 	Alg string
 
 	Kid string
+
+	Kty string
 }
 
 // GetJWKCertificates returns the list of CertMonitorJWK with alg, kid, x5c field
@@ -54,10 +56,11 @@ func (c *CertMonitor) getJWKCertificates(jwkUri string) ([]*CertMonitorJWK, erro
 				Certs: key.X509CertChain(),
 				Alg:   key.Algorithm(),
 				Kid:   key.KeyID(),
+				Kty:   key.KeyType().String(),
 			})
 
 			if c.logger.IsDebug() {
-				c.logger.Debug("JWK found", "alg", key.Algorithm(), "kid", key.KeyID())
+				c.logger.Debug("JWK found", "alg", key.Algorithm(), "kid", key.KeyID(), "kty", key.KeyType().String())
 			}
 		}
 
