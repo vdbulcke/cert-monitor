@@ -2,6 +2,15 @@
 ## [Unreleased]
 
 
+<a name="v1.3.1"></a>
+## [v1.3.1] - 2022-06-02
+### Bug Fixes
+- 8958680 - Dockerfile for gorleaser build ([#16](https://github.com/vdbulcke/cert-monitor/issues/16))
+
+### Features
+- 56217be - build/publish docker image in Action ([#16](https://github.com/vdbulcke/cert-monitor/issues/16))
+
+
 <a name="v1.3.0"></a>
 ## [v1.3.0] - 2022-04-03
 ### Features
@@ -74,7 +83,8 @@ Add 'skip_tls_validation: true' to your config
 <a name="v0.1.0"></a>
 ## v0.1.0 - 2021-04-02
 
-[Unreleased]: https://github.com/vdbulcke/cert-monitor/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/vdbulcke/cert-monitor/compare/v1.3.1...HEAD
+[v1.3.1]: https://github.com/vdbulcke/cert-monitor/compare/v1.3.0...v1.3.1
 [v1.3.0]: https://github.com/vdbulcke/cert-monitor/compare/v1.2.1...v1.3.0
 [v1.2.1]: https://github.com/vdbulcke/cert-monitor/compare/v1.2.0...v1.2.1
 [v1.2.0]: https://github.com/vdbulcke/cert-monitor/compare/v1.1.1...v1.2.0
