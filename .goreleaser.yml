@@ -74,6 +74,19 @@ changelog:
     - title: Others
       order: 999
 
+dockers:
+  - 
+    # GOOS of the built binaries/packages that should be used.
+    goos: linux
+
+    # GOARCH of the built binaries/packages that should be used.
+    goarch: amd64
+
+    # GOARM of the built binaries/packages that should be used.
+    goarm: ''
+
+    image_templates:
+    - "vdbulcke/cert-monitor:v{{ .Version }}"
 
 release:
   ## set github header and footer
@@ -82,7 +95,7 @@ release:
 
     repo: https://hub.docker.com/repository/docker/vdbulcke/cert-monitor/general
     ```bash
-    docker pull vdbulcke/cert-monitor:{{ .Tag }}
+    docker pull vdbulcke/cert-monitor:v{{ .Version }}
     ```
 
   # # Footer template for the release body.

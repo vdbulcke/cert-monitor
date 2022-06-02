@@ -7,7 +7,7 @@ import (
 
 	"github.com/go-playground/validator"
 	"github.com/hashicorp/go-hclog"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 // Config has been created
