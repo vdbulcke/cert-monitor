@@ -86,16 +86,16 @@ dockers:
     goarm: ''
 
     image_templates:
-    - "vdbulcke/cert-monitor:v{{ .Version }}"
+    - "ghcr.io/vdbulcke/cert-monitor:v{{ .Version }}"
 
 release:
   ## set github header and footer
   header: |
     ## Docker
 
-    repo: https://hub.docker.com/repository/docker/vdbulcke/cert-monitor/general
+    
     ```bash
-    docker pull vdbulcke/cert-monitor:v{{ .Version }}
+    docker pull ghcr.io/vdbulcke/cert-monitor:v{{ .Version }}
     ```
 
   # # Footer template for the release body.
