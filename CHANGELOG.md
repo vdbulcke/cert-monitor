@@ -2,6 +2,29 @@
 ## [Unreleased]
 
 
+<a name="v1.4.0"></a>
+## [v1.4.0] - 2023-03-04
+### Bug Fixes
+- eb9b418 - go lint workflow
+- b25550e - dependabots security issues ([#20](https://github.com/vdbulcke/cert-monitor/issues/20))
+
+### Features
+- e45d149 - add cosign signature via goreleaser
+- b86d921 - bump go version 1.20
+
+
+<a name="v1.3.3"></a>
+## [v1.3.3] - 2022-12-20
+### Bug Fixes
+- cd832a5 - build(deps): bump github.com/crewjam/saml from 0.4.6 to 0.4.9
+
+
+<a name="v1.3.2"></a>
+## [v1.3.2] - 2022-10-09
+### Features
+- 8f6fedb - switch to ghcr.io registry
+
+
 <a name="v1.3.1"></a>
 ## [v1.3.1] - 2022-06-02
 ### Bug Fixes
@@ -83,7 +106,10 @@ Add 'skip_tls_validation: true' to your config
 <a name="v0.1.0"></a>
 ## v0.1.0 - 2021-04-02
 
-[Unreleased]: https://github.com/vdbulcke/cert-monitor/compare/v1.3.1...HEAD
+[Unreleased]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.0...HEAD
+[v1.4.0]: https://github.com/vdbulcke/cert-monitor/compare/v1.3.3...v1.4.0
+[v1.3.3]: https://github.com/vdbulcke/cert-monitor/compare/v1.3.2...v1.3.3
+[v1.3.2]: https://github.com/vdbulcke/cert-monitor/compare/v1.3.1...v1.3.2
 [v1.3.1]: https://github.com/vdbulcke/cert-monitor/compare/v1.3.0...v1.3.1
 [v1.3.0]: https://github.com/vdbulcke/cert-monitor/compare/v1.2.1...v1.3.0
 [v1.2.1]: https://github.com/vdbulcke/cert-monitor/compare/v1.2.0...v1.2.1
