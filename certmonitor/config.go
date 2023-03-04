@@ -2,7 +2,7 @@ package certmonitor
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 
 	"github.com/go-playground/validator"
@@ -96,7 +96,7 @@ func ParseConfig(configFile string) (*Config, error) {
 	}
 
 	defer file.Close()
-	data, err := ioutil.ReadAll(file)
+	data, err := io.ReadAll(file)
 	if err != nil {
 		return nil, err
 	}

@@ -4,14 +4,14 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
-	"io/ioutil"
+	"os"
 	"strings"
 )
 
 // getX509CertFromFile  Parse Certificate from file and return X509Certificate or error
 func (certMonitor *CertMonitor) getX509CertFromFile(certFile string) (*x509.Certificate, error) {
 	// read cert
-	certRaw, err := ioutil.ReadFile(certFile)
+	certRaw, err := os.ReadFile(certFile)
 	if err != nil {
 		certMonitor.logger.Error("Could not read file", "file", certFile, "error", err)
 		return nil, err
@@ -40,7 +40,7 @@ func (certMonitor *CertMonitor) getX509CertFromFile(certFile string) (*x509.Cert
 func (certMonitor *CertMonitor) getCertificateFromDir(dir string) ([]*x509.Certificate, error) {
 
 	// load files in dir
-	files, err := ioutil.ReadDir(dir)
+	files, err := os.ReadDir(dir)
 	if err != nil {
 		certMonitor.logger.Error("Could list file in dir", "dir", dir, "error", err)
 		return nil, err
