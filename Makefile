@@ -9,26 +9,26 @@ test:
 	cd certmonitor/ && go test -run ''
 	
 scan: 
-	go list -json -deps |  nancy sleuth	
+	trivy fs .
 
 
 build: 
-	goreleaser build --rm-dist
+	goreleaser build --clean
 
 
 build-snapshot: 
-	goreleaser build --rm-dist --snapshot --single-target
+	goreleaser build --clean --snapshot --single-target
 
 
 
 release-skip-publish: 
-	goreleaser release --rm-dist --skip-publish 
+	goreleaser release --clean --skip-publish  --skip-sign
 
 release-snapshot: 
-	goreleaser release --rm-dist --skip-publish --snapshot
+	goreleaser release --clean --skip-publish --snapshot --skip-sign
 
 gen-doc: 
-	goreleaser build --rm-dist --snapshot
+	goreleaser build --clean --snapshot
 	./dist/cert-monitor_linux_amd64/cert-monitor documentation --dir ./doc
 
 .PHONY: changelog

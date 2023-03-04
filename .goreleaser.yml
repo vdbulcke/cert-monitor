@@ -21,16 +21,27 @@ builds:
       # - 386
     ldflags:
       ## auto inject commit and version at build time
-      - -X github.com/vdbulcke/cert-monitor/cmd.GitCommit={{ .ShortCommit }} -X github.com/vdbulcke/cert-monitor/cmd.Version={{ .Version }}  -X github.com/vdbulcke/cert-monitor/cmd.Date={{ .CommitDate }} -X github.com/vdbulcke/cert-monitor/cmd.BuiltBy=goreleaser
+      - -X github.com/vdbulcke/cert-monitor/cmd.GitCommit={{ .ShortCommit }} 
+      - -X github.com/vdbulcke/cert-monitor/cmd.Version={{ .Version }} 
+      - -X github.com/vdbulcke/cert-monitor/cmd.Date={{ .CommitDate }} 
+      - -X github.com/vdbulcke/cert-monitor/cmd.BuiltBy=goreleaser
 archives:
   - 
-    replacements:
-      ## Rewrite Archive name 
-      darwin: Darwin
-      linux: Linux
-      windows: Windows
-      386: i386
-      amd64: x86_64
+    ## Deprecated "replacements"
+    # replacements:
+    #   ## Rewrite Archive name 
+    #   darwin: Darwin
+    #   linux: Linux
+    #   windows: Windows
+    #   386: i386
+    #   amd64: x86_64
+    name_template: >-
+      {{ .ProjectName }}_{{ .Version }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
     ## use zip for windows release
     format_overrides:
       - goos: windows
@@ -88,6 +99,34 @@ dockers:
     image_templates:
     - "ghcr.io/vdbulcke/cert-monitor:v{{ .Version }}"
 
+
+##
+## Cosign
+##
+signs:
+  - cmd: cosign
+    signature: "${artifact}.sig"
+    certificate: '${artifact}.pem'
+    output: true
+    args: 
+      - "sign-blob"
+      - "--oidc-issuer=https://token.actions.githubusercontent.com" 
+      - "--output-certificate=${artifact}.pem"
+      - "--output-signature=${artifact}.sig" 
+      - "${artifact}"
+    artifacts: all
+
+docker_signs:
+- cmd: cosign
+  env:
+  - COSIGN_EXPERIMENTAL=1
+  artifacts: all
+  output: true
+  args:
+  - 'sign'
+  - "--oidc-issuer=https://token.actions.githubusercontent.com" 
+  - '${artifact}'
+
 release:
   ## set github header and footer
   header: |
@@ -96,6 +135,13 @@ release:
     
     ```bash
     docker pull ghcr.io/vdbulcke/cert-monitor:v{{ .Version }}
+    ```
+
+    ### Validate Cosign Signature 
+
+
+    ```bash
+    cosign verify --certificate-oidc-issuer https://token.actions.githubusercontent.com  --certificate-identity  "https://github.com/vdbulcke/cert-monitor/.github/workflows/release.yaml@refs/tags/v{{ .Version }}"  ghcr.io/vdbulcke/cert-monitor:v{{ .Version }}
     ```
 
   # # Footer template for the release body.
