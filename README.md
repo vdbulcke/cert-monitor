@@ -13,7 +13,30 @@ Cert Monitor is a CLI tool to discover and monitor X509 Certificates from variou
 * CLI: fetches certificate from remote sources (TCP, HTTPS, SAML, JWK) and display certificate information and PEM output
 
 
+
+## Install 
+
+See [Install Documenation](https://vdbulcke.github.io/cert-monitor/install/).
+
+### Validate Signature With Cosign
+
+Make sure you have `cosign` installed locally (see [Cosign Install](https://docs.sigstore.dev/cosign/installation/)).
+
+
+Then you can use the `./verify_signature.sh` in this repo: 
+
+```bash
+./verify_signature.sh PATH_TO_DOWNLOADED_ARCHIVE TAG_VERSION
+```
+for example
+```bash
+$ ./verify_signature.sh  ~/Downloads/cert-monitor_1.4.2_Linux_x86_64.tar.gz v1.4.2
+
+Checking Signature for version: v1.4.2
+Verified OK
+
+```
+
 ## Documentation 
 
 Complete documentation can found [here](https://vdbulcke.github.io/cert-monitor/)
-
