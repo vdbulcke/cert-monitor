@@ -2,6 +2,18 @@
 ## [Unreleased]
 
 
+<a name="v1.4.2"></a>
+## [v1.4.2] - 2023-07-01
+### Bug Fixes
+- 0e5498a - dependabots security issue  ([#22](https://github.com/vdbulcke/cert-monitor/issues/22))
+
+
+<a name="v1.4.1"></a>
+## [v1.4.1] - 2023-03-25
+### Bug Fixes
+- e1f0572 - security issue ([#21](https://github.com/vdbulcke/cert-monitor/issues/21))
+
+
 <a name="v1.4.0"></a>
 ## [v1.4.0] - 2023-03-04
 ### Bug Fixes
@@ -106,7 +118,9 @@ Add 'skip_tls_validation: true' to your config
 <a name="v0.1.0"></a>
 ## v0.1.0 - 2021-04-02
 
-[Unreleased]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.2...HEAD
+[v1.4.2]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.1...v1.4.2
+[v1.4.1]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.0...v1.4.1
 [v1.4.0]: https://github.com/vdbulcke/cert-monitor/compare/v1.3.3...v1.4.0
 [v1.3.3]: https://github.com/vdbulcke/cert-monitor/compare/v1.3.2...v1.3.3
 [v1.3.2]: https://github.com/vdbulcke/cert-monitor/compare/v1.3.1...v1.3.2
