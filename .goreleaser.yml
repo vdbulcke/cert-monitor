@@ -125,7 +125,7 @@ docker_signs:
   args:
   - 'sign'
   - "--oidc-issuer=https://token.actions.githubusercontent.com" 
-  - '${artifact}'
+  - '${artifact}@${digest}'
 
 release:
   ## set github header and footer
