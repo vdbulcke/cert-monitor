@@ -10,7 +10,7 @@ test:
 	
 scan: 
 	trivy fs .
-
+	semgrep scan --disable-version-check --config "p/owasp-top-ten" --metrics=off ./
 
 build: 
 	goreleaser build --clean
