@@ -2,6 +2,12 @@
 ## [Unreleased]
 
 
+<a name="v1.4.3"></a>
+## [v1.4.3] - 2023-11-01
+### Bug Fixes
+- f29070c - upgrade dependencies
+
+
 <a name="v1.4.2"></a>
 ## [v1.4.2] - 2023-07-01
 ### Bug Fixes
@@ -118,7 +124,8 @@ Add 'skip_tls_validation: true' to your config
 <a name="v0.1.0"></a>
 ## v0.1.0 - 2021-04-02
 
-[Unreleased]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.2...HEAD
+[Unreleased]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.3...HEAD
+[v1.4.3]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.2...v1.4.3
 [v1.4.2]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.1...v1.4.2
 [v1.4.1]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.0...v1.4.1
 [v1.4.0]: https://github.com/vdbulcke/cert-monitor/compare/v1.3.3...v1.4.0
