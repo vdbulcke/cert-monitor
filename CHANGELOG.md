@@ -2,6 +2,12 @@
 ## [Unreleased]
 
 
+<a name="v1.4.4"></a>
+## [v1.4.4] - 2023-12-26
+### Bug Fixes
+- 0e740cb - dependabot dep update
+
+
 <a name="v1.4.3"></a>
 ## [v1.4.3] - 2023-11-01
 ### Bug Fixes
@@ -124,7 +130,8 @@ Add 'skip_tls_validation: true' to your config
 <a name="v0.1.0"></a>
 ## v0.1.0 - 2021-04-02
 
-[Unreleased]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.3...HEAD
+[Unreleased]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.4...HEAD
+[v1.4.4]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.3...v1.4.4
 [v1.4.3]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.2...v1.4.3
 [v1.4.2]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.1...v1.4.2
 [v1.4.1]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.0...v1.4.1
