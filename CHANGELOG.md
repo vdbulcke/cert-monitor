@@ -2,6 +2,18 @@
 ## [Unreleased]
 
 
+<a name="v1.4.6"></a>
+## [v1.4.6] - 2024-04-01
+### Bug Fixes
+- 4cb59c7 - dependencies update
+
+
+<a name="v1.4.5"></a>
+## [v1.4.5] - 2024-01-27
+### Bug Fixes
+- 88245e5 - update dependencies
+
+
 <a name="v1.4.4"></a>
 ## [v1.4.4] - 2023-12-26
 ### Bug Fixes
@@ -130,7 +142,9 @@ Add 'skip_tls_validation: true' to your config
 <a name="v0.1.0"></a>
 ## v0.1.0 - 2021-04-02
 
-[Unreleased]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.4...HEAD
+[Unreleased]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.6...HEAD
+[v1.4.6]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.5...v1.4.6
+[v1.4.5]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.4...v1.4.5
 [v1.4.4]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.3...v1.4.4
 [v1.4.3]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.2...v1.4.3
 [v1.4.2]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.1...v1.4.2
