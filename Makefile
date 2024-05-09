@@ -6,8 +6,7 @@
 prepare-release: lint scan release-skip-publish
 
 test: 
-	cd certmonitor/ && go test -run ''
-	
+	 go test -v  ./...	
 scan: 
 	trivy fs .
 	semgrep scan --disable-version-check --config "p/owasp-top-ten" --metrics=off ./

@@ -4,8 +4,8 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/vdbulcke/cert-monitor/certmonitor"
-	"github.com/vdbulcke/cert-monitor/ui"
+	"github.com/vdbulcke/cert-monitor/src/certmonitor"
+	"github.com/vdbulcke/cert-monitor/src/ui"
 )
 
 var url string
@@ -18,6 +18,7 @@ func init() {
 	// add flags to sub command
 	fetchTlsCmd.Flags().StringVarP(&url, "url", "u", "", "remote TLS endpoint")
 	fetchTlsCmd.Flags().StringVarP(&sni, "sni", "", "", "TLS Server Name Identifier")
+	fetchTlsCmd.Flags().StringVarP(&tlsVersion, "tls-version", "", "", "force TLS version [tlsv1.2|tlsv1.3]")
 
 	// required flags
 	//nolint
@@ -50,7 +51,7 @@ func fetchTLSHandler(cmd *cobra.Command, args []string) {
 	c := certmonitor.NewCertMonitor(appLogger, config)
 
 	// fetch remote certs
-	certs, err := c.GetCertificateFromRemoteURL(url, sni)
+	certs, err := c.GetCertificateFromRemoteURL(url, sni, tlsVersion)
 	if err != nil {
 
 		appLogger.Error("Error fetching certificate from remote", "url", url, "err", err)

@@ -1,7 +1,7 @@
 package main
 
 import (
-	cmd "github.com/vdbulcke/cert-monitor/cmd"
+	cmd "github.com/vdbulcke/cert-monitor/src/cmd"
 )
 
 func main() {

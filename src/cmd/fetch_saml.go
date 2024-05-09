@@ -4,8 +4,8 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/vdbulcke/cert-monitor/certmonitor"
-	"github.com/vdbulcke/cert-monitor/ui"
+	"github.com/vdbulcke/cert-monitor/src/certmonitor"
+	"github.com/vdbulcke/cert-monitor/src/ui"
 )
 
 var metadataUrl string

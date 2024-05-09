@@ -10,7 +10,7 @@ import (
 
 	"github.com/hashicorp/go-hclog"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/vdbulcke/cert-monitor/certmonitor"
+	"github.com/vdbulcke/cert-monitor/src/certmonitor"
 )
 
 // NewServer starts a new cert-monitor server

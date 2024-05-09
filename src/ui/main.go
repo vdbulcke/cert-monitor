@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/hashicorp/go-hclog"
-	"github.com/vdbulcke/cert-monitor/certmonitor"
+	"github.com/vdbulcke/cert-monitor/src/certmonitor"
 )
 
 func MakeUILogger(debug bool, noText bool, noColor bool) hclog.Logger {

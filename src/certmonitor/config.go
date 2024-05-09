@@ -48,6 +48,7 @@ type Config struct {
 type RemoteTLSEndpoint struct {
 	Address    string `yaml:"address" validate:"required,omitempty"`
 	ServerName string `yaml:"servername"`
+	TlsVersion string `yaml:"tls_version"`
 }
 
 // RemoteTCPTLSEndpoint a remote tls endpoint to monitor
@@ -55,6 +56,7 @@ type RemoteTCPTLSEndpoint struct {
 	Address    string `yaml:"address" validate:"required,omitempty"`
 	Port       int    `yaml:"port" validate:"required,omitempty"`
 	ServerName string `yaml:"servername"`
+	TlsVersion string `yaml:"tls_version"`
 }
 
 // RemoteSAMLMetdataEndpoint a remote URL exposing SAML Metadata

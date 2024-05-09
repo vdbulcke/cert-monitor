@@ -5,12 +5,13 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/vdbulcke/cert-monitor/certmonitor"
-	"github.com/vdbulcke/cert-monitor/ui"
+	"github.com/vdbulcke/cert-monitor/src/certmonitor"
+	"github.com/vdbulcke/cert-monitor/src/ui"
 )
 
 var address string
 var port int
+var tlsVersion string
 
 func init() {
 	// bind to root command
@@ -20,6 +21,7 @@ func init() {
 	fetchTCPCmd.Flags().StringVarP(&address, "address", "a", "", "Remote host address")
 	fetchTCPCmd.Flags().IntVarP(&port, "port", "p", 0, "Remote host port")
 	fetchTCPCmd.Flags().StringVarP(&sni, "sni", "", "", "TLS Server Name Identifier")
+	fetchTCPCmd.Flags().StringVarP(&tlsVersion, "tls-version", "", "", "force TLS version [tlsv1.2|tlsv1.3]")
 
 	// required flags
 	err := fetchTCPCmd.MarkFlagRequired("address")
@@ -57,7 +59,7 @@ func fetchTCPHandler(cmd *cobra.Command, args []string) {
 	c := certmonitor.NewCertMonitor(appLogger, config)
 
 	// fetch remote certs
-	certs, err := c.GetCertificateFromRemoteAddress(address, port, sni)
+	certs, err := c.GetCertificateFromRemoteAddress(address, port, sni, tlsVersion)
 	if err != nil {
 
 		appLogger.Error("Error fetching certificate from remote", "address", address, "err", err)

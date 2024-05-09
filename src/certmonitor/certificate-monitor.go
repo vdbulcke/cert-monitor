@@ -144,7 +144,7 @@ func (certMonitor *CertMonitor) LoadRemoteCertificateMetrics() {
 	for _, remoteTLSEndpoint := range certMonitor.config.RemoteTLSEndpoints {
 
 		// get the list of certs from endpoint
-		certs, err := certMonitor.getCertificateFromRemoteURL(remoteTLSEndpoint.Address, remoteTLSEndpoint.ServerName)
+		certs, err := certMonitor.getCertificateFromRemoteURL(remoteTLSEndpoint)
 		if err != nil {
 			certMonitor.logger.Error("Error Connection", "address", remoteTLSEndpoint.Address, "err", err)
 			continue
@@ -160,7 +160,7 @@ func (certMonitor *CertMonitor) LoadRemoteCertificateMetrics() {
 
 		address := remoteTCPTLSEndpoint.Address + ":" + strconv.Itoa(remoteTCPTLSEndpoint.Port)
 		// get the list of certs from endpoint
-		certs, err := certMonitor.getCertificateFromRemoteAddress(address, remoteTCPTLSEndpoint.ServerName)
+		certs, err := certMonitor.getCertificateFromRemoteAddress(remoteTCPTLSEndpoint)
 		if err != nil {
 			certMonitor.logger.Error("Error TCP Connection", "address", address, "err", err)
 			continue

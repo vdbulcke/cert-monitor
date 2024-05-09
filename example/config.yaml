@@ -54,6 +54,9 @@ schedule_job_hours: 12
 ###     address: (required)
 ###     ## servername for the TLS SNI extension. 
 ###     servername: (optional)
+###     ## Force TLS Version
+###     ##   Allowed values: "tlsv1.2", "tlsv1.3"
+###     tls_version: (optional)
 remote_tls_endpoints: 
 ## use 'servername' to Force the SNI to a specific value
 - address: "google.com"
@@ -75,6 +78,9 @@ remote_tls_endpoints:
 ###     port: (required)
 ###     ## servername for the TLS SNI extension. 
 ###     servername:
+###     ## Force TLS Version
+###     ##   Allowed values: "tlsv1.2", "tlsv1.3"
+###     tls_version: (optional)
 remote_tcp_tls_endpoints: []
 # - address: "ldap-server.example.com"
 #   port: 443

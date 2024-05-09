@@ -6,8 +6,8 @@ import (
 
 	"github.com/hashicorp/go-hclog"
 	"github.com/spf13/cobra"
-	"github.com/vdbulcke/cert-monitor/certmonitor"
-	"github.com/vdbulcke/cert-monitor/server"
+	"github.com/vdbulcke/cert-monitor/src/certmonitor"
+	"github.com/vdbulcke/cert-monitor/src/server"
 )
 
 func init() {
