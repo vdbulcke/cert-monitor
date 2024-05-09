@@ -2,6 +2,12 @@
 ## [Unreleased]
 
 
+<a name="v1.5.0"></a>
+## [v1.5.0] - 2024-05-09
+### Features
+- 0355601 - add --tls-version flag to force tls version
+
+
 <a name="v1.4.6"></a>
 ## [v1.4.6] - 2024-04-01
 ### Bug Fixes
@@ -142,7 +148,8 @@ Add 'skip_tls_validation: true' to your config
 <a name="v0.1.0"></a>
 ## v0.1.0 - 2021-04-02
 
-[Unreleased]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.6...HEAD
+[Unreleased]: https://github.com/vdbulcke/cert-monitor/compare/v1.5.0...HEAD
+[v1.5.0]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.6...v1.5.0
 [v1.4.6]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.5...v1.4.6
 [v1.4.5]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.4...v1.4.5
 [v1.4.4]: https://github.com/vdbulcke/cert-monitor/compare/v1.4.3...v1.4.4
