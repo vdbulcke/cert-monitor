@@ -20,8 +20,8 @@ func TestSAMLMetadata(t *testing.T) {
 	emptyConfig := &Config{}
 	certMonitor := NewCertMonitor(appLogger, emptyConfig)
 
-	// x509SAMLCert, err := certMonitor.getSAMLMetadataCertificates("https://iamapps-public.int.belgium.be/saml/fas-metadata.xml")
-	x509SAMLCert, err := certMonitor.getSAMLMetadataCertificates("https://idp.iamfas.belgium.be/EidasNode/ServiceMetadata")
+	x509SAMLCert, err := certMonitor.getSAMLMetadataCertificates("https://iamapps-public.int.belgium.be/saml/fas-metadata.xml")
+	// x509SAMLCert, err := certMonitor.getSAMLMetadataCertificates("https://idp.iamfas.belgium.be/EidasNodeConnec/ServiceMetadata")
 	// x509SAMLCert, err := certMonitor.getSAMLMetadataCertificates("http://localhost:8080/fas-metadata_error_syntax.xml")
 
 	if err != nil {
