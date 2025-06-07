@@ -3,6 +3,7 @@ package ui
 import (
 	"crypto/x509"
 	"encoding/pem"
+	"fmt"
 	"os"
 
 	"github.com/hashicorp/go-hclog"
@@ -40,6 +41,8 @@ func MakeUILogger(debug bool, noText bool, noColor bool) hclog.Logger {
 
 type CertMonitorUI struct {
 	Logger hclog.Logger
+
+	table bool
 }
 
 // NewCertMonitorUI create a new UI
@@ -47,11 +50,16 @@ func NewCertMonitorUI(l hclog.Logger, debug bool, noText bool) *CertMonitorUI {
 
 	return &CertMonitorUI{
 		Logger: l,
+		table:  true,
 	}
 }
 
 // PrintX509Cert print the X509 cert
 func (u *CertMonitorUI) PrintX509Cert(cert *x509.Certificate, index int, skew int) {
+	if u.table {
+		u.TablePrintX509Cert(cert, skew, &TableEntry{Key: "index", Value: fmt.Sprintf("%d", index)})
+		return
+	}
 
 	u.Logger.Info("X509 Certificate", "index", index, "Subject", cert.Subject.String())
 	u.Logger.Info("X509 Certificate", "index", index, "Issuer", cert.Issuer.String())
@@ -78,7 +86,13 @@ func (u *CertMonitorUI) PrintX509CertList(certs []*x509.Certificate, skew int) {
 }
 
 // JWK format
-func (u *CertMonitorUI) PrintJWKCert(jwk *certmonitor.CertMonitorJWK, index int, skew int) {
+func (u *CertMonitorUI) PrintJWKCert(jwk *certmonitor.CertMonitorJWK, skew int) {
+
+	if u.table {
+		u.TablePrintJwkCert(jwk, skew)
+		return
+	}
+
 	u.Logger.Info("JWK Key", "kid", jwk.Kid, "alg", jwk.Alg, "kty", jwk.Kty)
 
 	// print certs
@@ -100,7 +114,7 @@ func (u *CertMonitorUI) PrintJWKCerts(jwks []*certmonitor.CertMonitorJWK, alg st
 		// list
 		for _, j := range jwks {
 
-			u.PrintJWKCert(j, index, skew)
+			u.PrintJWKCert(j, skew)
 		}
 	} else {
 
@@ -133,7 +147,7 @@ func (u *CertMonitorUI) PrintJWKCerts(jwks []*certmonitor.CertMonitorJWK, alg st
 
 			// if current entry was not skipped by
 			// any of the filter then print
-			u.PrintJWKCert(j, index, skew)
+			u.PrintJWKCert(j, skew)
 
 		}
 	}

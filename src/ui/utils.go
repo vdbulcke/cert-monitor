@@ -30,3 +30,25 @@ func CheckCertificate(cert *x509.Certificate, clockSkewDays int, logger hclog.Lo
 
 	return true
 }
+
+// IsValid check certificate expiration with skewed days
+func IsValid(cert *x509.Certificate, clockSkewDays int) bool {
+
+	// build time skew
+	now := time.Now()
+	// skew := 10
+	skew := time.Duration(clockSkewDays)
+	skewDate := now.Add(time.Hour * 24 * skew)
+
+	if skewDate.After(cert.NotAfter) {
+		return false
+
+	}
+
+	if now.Before(cert.NotBefore) {
+		return false
+
+	}
+
+	return true
+}
