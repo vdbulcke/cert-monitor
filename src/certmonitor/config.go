@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"time"
 
 	"github.com/go-playground/validator"
 	"github.com/hashicorp/go-hclog"
@@ -42,6 +43,8 @@ type Config struct {
 
 	// Skip Tls Validation
 	SkipTLSValidation bool `yaml:"skip_tls_validation"`
+
+	ExpirationDuration time.Duration `yaml:"expiration_warning_duration"`
 }
 
 // RemoteTLSEndpoint a remote tls endpoint to monitor

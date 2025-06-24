@@ -5,6 +5,7 @@ import (
 	"crypto/x509"
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/carlescere/scheduler"
 	"github.com/prometheus/client_golang/prometheus"
@@ -44,6 +45,7 @@ func (certMonitor *CertMonitor) loadRemoteCertsMetrics(certs []*x509.Certificate
 			// "remote_addr":       connectionSting,
 			// "tls_servername":    tlsServername,
 		}).Set(float64(notAfter.Unix()))
+		certMonitor.checkExpiration(cert)
 	}
 
 }
@@ -64,6 +66,7 @@ func (certMonitor *CertMonitor) loadLocalCertificateDirMetrics(certs []*x509.Cer
 			"cert_subj":         subj,
 			"sha256fingerprint": fmt.Sprintf("%x", fingerprint),
 		}).Set(float64(notAfter.Unix()))
+		certMonitor.checkExpiration(cert)
 
 	}
 
@@ -100,6 +103,7 @@ func (certMonitor *CertMonitor) loadRemoteSAMLMetadataCertificateMetrics(certs [
 			// "remote_addr":       connectionSting,
 			// "tls_servername":    tlsServername,
 		}).Set(float64(notAfter.Unix()))
+		certMonitor.checkExpiration(cert)
 	}
 
 }
@@ -124,6 +128,19 @@ func (certMonitor *CertMonitor) loadRemoteJWKCertificateMetrics(certs []*x509.Ce
 			"kid":               kid,
 			"kty":               kty,
 		}).Set(float64(notAfter.Unix()))
+
+		certMonitor.checkExpiration(cert)
+	}
+
+}
+
+func (c *CertMonitor) checkExpiration(cert *x509.Certificate) {
+
+	// future date from expiration (e.g. 30 days)
+	future := time.Now().Add(c.config.ExpirationDuration)
+
+	if future.After(cert.NotAfter) {
+		promMetricCertificateExpirationCount.Add(1.0)
 	}
 
 }
@@ -131,6 +148,8 @@ func (certMonitor *CertMonitor) loadRemoteJWKCertificateMetrics(certs []*x509.Ce
 // LoadRemoteCertificateMetrics load Certifcate from Remote endpoints
 func (certMonitor *CertMonitor) LoadRemoteCertificateMetrics() {
 	certMonitor.logger.Info("Executing  LoadRemoteCertificateMetrics")
+	// reset counter
+	promMetricCertificateExpirationCount.Set(0.0)
 
 	// reset mertics before re-checking the remote endpoint
 	if certMonitor.logger.IsDebug() {
