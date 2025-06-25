@@ -1,8 +1,6 @@
 module github.com/vdbulcke/cert-monitor
 
-go 1.23.0
-
-toolchain go1.24.1
+go 1.24.1
 
 require (
 	github.com/carlescere/scheduler v0.0.0-20170109141437-ee74d2f83d82
