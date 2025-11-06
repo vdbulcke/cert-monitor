@@ -111,7 +111,7 @@ func (u *CertMonitorUI) TableX509Cert(cert *x509.Certificate, skew int, extra ..
 	table := ltable.New().
 		// Headers(columnNames...).
 		Rows(data...).
-		Width(150).
+		// Width(150).
 		StyleFunc(func(row, col int) lipgloss.Style {
 			return defaultStyles.Cell
 		})

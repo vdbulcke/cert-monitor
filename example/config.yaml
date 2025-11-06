@@ -99,8 +99,8 @@ remote_tcp_tls_endpoints: []
 ###     url: (required)
 remote_saml_metadata_endpoints:
 - url: "https://iamapps-public.int.belgium.be/saml/fas-metadata.xml"
-- url: "https://idp.iamfas.belgium.be/EidasNode/ServiceMetadata"
-- url: "https://idp.iamfas.belgium.be/EidasNode/ConnectorMetadata"
+# - url: "https://idp.iamfas.belgium.be/EidasNode/ServiceMetadata"
+# - url: "https://idp.iamfas.belgium.be/EidasNode/ConnectorMetadata"
 
 
 ##
