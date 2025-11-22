@@ -27,6 +27,8 @@ builds:
       - -X github.com/vdbulcke/cert-monitor/src/cmd.Version={{ .Version }} 
       - -X github.com/vdbulcke/cert-monitor/src/cmd.Date={{ .CommitDate }} 
       - -X github.com/vdbulcke/cert-monitor/src/cmd.BuiltBy=goreleaser
+    flags:
+      - -trimpath
 archives:
   - 
     ## Deprecated "replacements"
@@ -47,7 +49,7 @@ archives:
     ## use zip for windows release
     format_overrides:
       - goos: windows
-        format: zip
+        formats: ['zip']
     files:
     - LICENSE
 
@@ -105,29 +107,29 @@ dockers:
 ##
 ## Cosign
 ##
-signs:
-  - cmd: cosign
-    signature: "${artifact}.sig"
-    certificate: '${artifact}.pem'
-    output: true
-    args: 
-      - "sign-blob"
-      - "--oidc-issuer=https://token.actions.githubusercontent.com" 
-      - "--output-certificate=${artifact}.pem"
-      - "--output-signature=${artifact}.sig" 
-      - "${artifact}"
-    artifacts: all
+# signs:
+#   - cmd: cosign
+#     signature: "${artifact}.sig"
+#     certificate: '${artifact}.pem'
+#     output: true
+#     args: 
+#       - "sign-blob"
+#       - "--oidc-issuer=https://token.actions.githubusercontent.com" 
+#       - "--output-certificate=${artifact}.pem"
+#       - "--output-signature=${artifact}.sig" 
+#       - "${artifact}"
+#     artifacts: all
 
-docker_signs:
-- cmd: cosign
-  env:
-  - COSIGN_EXPERIMENTAL=1
-  artifacts: all
-  output: true
-  args:
-  - 'sign'
-  - "--oidc-issuer=https://token.actions.githubusercontent.com" 
-  - '${artifact}@${digest}'
+# docker_signs:
+# - cmd: cosign
+#   env:
+#   - COSIGN_EXPERIMENTAL=1
+#   artifacts: all
+#   output: true
+#   args:
+#   - 'sign'
+#   - "--oidc-issuer=https://token.actions.githubusercontent.com" 
+#   - '${artifact}@${digest}'
 
 release:
   ## set github header and footer
@@ -139,12 +141,12 @@ release:
     docker pull ghcr.io/vdbulcke/cert-monitor:v{{ .Version }}
     ```
 
-    ### Validate Cosign Signature 
+  # ### Validate Cosign Signature 
 
 
-    ```bash
-    cosign verify --certificate-oidc-issuer https://token.actions.githubusercontent.com  --certificate-identity  "https://github.com/vdbulcke/cert-monitor/.github/workflows/release.yaml@refs/tags/v{{ .Version }}"  ghcr.io/vdbulcke/cert-monitor:v{{ .Version }}
-    ```
+  # ```bash
+  # cosign verify --certificate-oidc-issuer https://token.actions.githubusercontent.com  --certificate-identity  "https://github.com/vdbulcke/cert-monitor/.github/workflows/release.yaml@refs/tags/v{{ .Version }}"  ghcr.io/vdbulcke/cert-monitor:v{{ .Version }}
+  # ```
 
   # # Footer template for the release body.
   # # Defaults to empty.
