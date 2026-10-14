@@ -30,7 +30,7 @@ var (
 			//  Fingerprint of certificate
 			"sha256fingerprint",
 			// // remote address
-			// "remote_addr",
+			"remote_addr",
 			// // TLS ServerName (for SNI)
 			// "tls_servername",
 		},

@@ -42,7 +42,7 @@ func (certMonitor *CertMonitor) loadRemoteCertsMetrics(certs []*x509.Certificate
 		promMetricRemoteCertificateExpirationSeconds.With(prometheus.Labels{
 			"cert_subj":         subj,
 			"sha256fingerprint": fmt.Sprintf("%x", fingerprint),
-			// "remote_addr":       connectionSting,
+			"remote_addr":       connectionSting,
 			// "tls_servername":    tlsServername,
 		}).Set(float64(notAfter.Unix()))
 		certMonitor.checkExpiration(cert)
