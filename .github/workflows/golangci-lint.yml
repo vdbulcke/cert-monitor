@@ -1,11 +1,12 @@
 ## Ref: https://github.com/golangci/golangci-lint-action
 name: golangci-lint
 on:
-  push:
-    branches:
-      - master
-      - main
-  pull_request:
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - master
+  #     - main
+  # pull_request:
 permissions:
   contents: read
   # Optional: allow read access to pull request. Use with `only-new-issues` option.

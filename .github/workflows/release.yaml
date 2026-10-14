@@ -4,6 +4,7 @@ name: goreleaser
 ## Ref: https://goreleaser.com/ci/actions/#github-actions
 ## Ref: https://docs.github.com/en/packages/managing-github-packages-using-github-actions-workflows/publishing-and-installing-a-package-with-github-actions
 on:
+  workflow_dispatch:
   # push: 
   #   tags: 
   #     - 'v*'
